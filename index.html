@@ -3,1167 +3,284 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>중3 석차백분률 예측을 위한 내신 계산 프로그램</title>
+<title>중3 최종 석차 및 백분율 예측 프로그램</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
 /* ==========================================================================
-   디자인 토큰 — 연한 하늘색 + 핑크
+   디자인 토큰 (기존 테마 유지)
    ========================================================================== */
 :root{
-  --bg:#EAF5FB;
-  --surface:#FFFFFF;
-  --surface-2:#F4FAFD;
-  --ink:#1F2E3D;
-  --ink-2:#55697E;
-  --ink-3:#8598AB;
-  --line:#D8E9F3;
-  --line-2:#BEDAEA;
-
-  --pink:#E5197F;
-  --pink-ink:#FFFFFF;
-  --pink-soft:#FDE6F1;
-  --sky:#2E9FD4;
-  --sky-soft:#E1F3FC;
-
-  --warn:#B4722A;
-  --warn-soft:#FBEEDA;
-  --danger:#C8324F;
-  --danger-soft:#FBE3E8;
-
-  /* 성취도 램프: 핑크(A) → 하늘 → 회청(E) */
-  --gA:#E5197F;  --onA:#FFFFFF;
-  --gB:#F7A8C9;  --onB:#6A0E3D;
-  --gC:#A8DDF3;  --onC:#0E4257;
-  --gD:#CFE3EE;  --onD:#2A4A5C;
-  --gE:#E3E9ED;  --onE:#4A5560;
-
+  --bg:#EAF5FB; --surface:#FFFFFF; --surface-2:#F4FAFD;
+  --ink:#1F2E3D; --ink-2:#55697E; --ink-3:#8598AB;
+  --line:#D8E9F3; --line-2:#BEDAEA;
+  --pink:#E5197F; --pink-ink:#FFFFFF; --pink-soft:#FDE6F1;
+  --sky:#2E9FD4; --sky-soft:#E1F3FC;
+  --warn:#B4722A; --warn-soft:#FBEEDA;
+  --danger:#C8324F; --danger-soft:#FBE3E8;
   --shadow:0 1px 2px rgba(31,46,61,.05), 0 12px 28px -18px rgba(31,46,61,.28);
   --r:14px;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0E1620; --surface:#16212C; --surface-2:#1C2833;
-    --ink:#E6EFF6; --ink-2:#A3B6C6; --ink-3:#7A8EA0;
-    --line:#26343F; --line-2:#354653;
-    --pink:#FF6BA8; --pink-ink:#2A0413; --pink-soft:#33131F;
-    --sky:#61C3EE; --sky-soft:#12303E;
-    --warn:#E0B060; --warn-soft:#2E2413;
-    --danger:#F0798D; --danger-soft:#351A20;
-    --gA:#FF4D97; --onA:#2A0413;
-    --gB:#B4627F; --onB:#FFF0F6;
-    --gC:#3E8FB0; --onC:#E6F6FD;
-    --gD:#35576B; --onD:#DCEAF2;
-    --gE:#3A4650; --onE:#C7D2DA;
-    --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -20px rgba(0,0,0,.9);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0E1620; --surface:#16212C; --surface-2:#1C2833;
-  --ink:#E6EFF6; --ink-2:#A3B6C6; --ink-3:#7A8EA0;
-  --line:#26343F; --line-2:#354653;
-  --pink:#FF6BA8; --pink-ink:#2A0413; --pink-soft:#33131F;
-  --sky:#61C3EE; --sky-soft:#12303E;
-  --warn:#E0B060; --warn-soft:#2E2413;
-  --danger:#F0798D; --danger-soft:#351A20;
-  --gA:#FF4D97; --onA:#2A0413;
-  --gB:#B4627F; --onB:#FFF0F6;
-  --gC:#3E8FB0; --onC:#E6F6FD;
-  --gD:#35576B; --onD:#DCEAF2;
-  --gE:#3A4650; --onE:#C7D2DA;
-  --shadow:0 1px 2px rgba(0,0,0,.45), 0 14px 34px -20px rgba(0,0,0,.9);
-}
-
 *{box-sizing:border-box}
 body{
   margin:0;
-  background:
-    radial-gradient(1100px 480px at 12% -8%, var(--sky-soft), transparent 62%),
-    radial-gradient(900px 420px at 92% 0%, var(--pink-soft), transparent 58%),
-    var(--bg);
-  background-attachment:fixed;
-  color:var(--ink);
+  background: radial-gradient(1100px 480px at 12% -8%, var(--sky-soft), transparent 62%),
+              radial-gradient(900px 420px at 92% 0%, var(--pink-soft), transparent 58%), var(--bg);
+  background-attachment:fixed; color:var(--ink);
   font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
 }
-.app{max-width:1240px;margin:0 auto;padding:30px 20px 72px;display:flex;flex-direction:column;gap:20px}
+.app { max-width: 900px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 24px; }
 
-/* ---------- 머리말 ---------- */
-.masthead{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between;
-  padding-bottom:18px;border-bottom:2px solid var(--line-2)}
-.eyebrow{margin:0 0 6px;font-size:11.5px;font-weight:700;letter-spacing:.16em;color:var(--pink)}
-h1{margin:0;font-family:"Gowun Dodum","Apple SD Gothic Neo",sans-serif;font-weight:400;
-  font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-.02em}
-h1 em{font-style:normal;color:var(--pink)}
-.lede{margin:9px 0 0;max-width:58ch;color:var(--ink-2);font-size:14px}
-
-.toolbar{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.trow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
-.tlab{font-size:11.5px;color:var(--ink-3)}
-input[type="text"],select{font:inherit;color:var(--ink);background:var(--surface);
-  border:1px solid var(--line-2);border-radius:10px;padding:7px 11px;min-width:0}
-input[type="text"]{width:128px}
-.trow.sub select{font-size:12.5px;padding:5px 9px;max-width:158px}
-.btn{font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;border-radius:10px;padding:7px 14px;
-  background:var(--surface);color:var(--ink);border:1px solid var(--line-2);
-  transition:background .15s,border-color .15s,color .15s}
-.btn:hover{background:var(--sky-soft);border-color:var(--sky)}
-.btn-primary{background:var(--pink);color:var(--pink-ink);border-color:var(--pink)}
-.btn-primary:hover{background:var(--pink);border-color:var(--pink);filter:brightness(1.07)}
-.btn-sm{font-size:12px;padding:5px 10px;border-radius:8px}
-.btn[hidden]{display:none}
-:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
-.folder{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:4px 10px;border-radius:8px;
-  background:var(--surface-2);border:1px solid var(--line);color:var(--ink-3);
-  max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.folder.set{background:var(--sky-soft);border-color:var(--sky);color:var(--sky);font-weight:600}
-.printhead{display:none}
+/* ---------- 헤더 ---------- */
+.masthead { border-bottom: 2px solid var(--line-2); padding-bottom: 20px; }
+.eyebrow { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--sky); }
+h1 { margin: 0; font-family: "Gowun Dodum", sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em; }
+.lede { margin: 10px 0 0; color: var(--ink-2); font-size: 14px; }
 
 /* ---------- 레이아웃 ---------- */
-.grid{display:grid;grid-template-columns:1fr;gap:20px}
-@media (min-width:1040px){ .grid{grid-template-columns:minmax(0,1fr) 372px;align-items:start} }
-.col{display:flex;flex-direction:column;gap:20px;min-width:0}
-.col.side{position:sticky;top:18px}
-@media (max-width:1039px){ .col.side{position:static} }
+.grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 768px) { .grid { grid-template-columns: 1fr 1fr; align-items: start; } }
 
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);}
-.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  padding:15px 20px;border-bottom:1px solid var(--line);background:var(--surface-2)}
-.card-h h2{margin:0;font-family:"Gowun Dodum",sans-serif;font-weight:400;font-size:19px;letter-spacing:-.01em}
-.card-h .hint{font-size:12px;color:var(--ink-3)}
-.pad{padding:18px 12px}
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
+.card-h { background: var(--surface-2); padding: 16px 20px; border-bottom: 1px solid var(--line); font-family: "Gowun Dodum", sans-serif; font-size: 18px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.card-body { padding: 24px 20px; }
 
-/* ---------- 학기 블록 (과목 편성 + 성취도 한자리) ---------- */
-.sem{border-bottom:1px solid var(--line)}
-.sem:last-child{border-bottom:none}
-.sem-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:11px 20px}
-.sem-id{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.sem-id b{font-size:15px;font-weight:600;letter-spacing:-.01em}
-.wpill{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:20px;
-  background:var(--sky-soft);color:var(--sky)}
-.sem.free .wpill{background:var(--line);color:var(--ink-3)}
-.sem-act{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.sem-body{padding:0 20px 14px}
-.sem.free .sem-body{color:var(--ink-3);font-size:13px;padding-bottom:16px}
-.toggle{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2);cursor:pointer;user-select:none}
-.toggle input{accent-color:var(--pink);width:15px;height:15px;margin:0}
+/* ---------- 입력 폼 ---------- */
+.input-group { display: flex; flex-direction: column; gap: 16px; }
+.input-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.input-row label { font-weight: 500; color: var(--ink); font-size: 14.5px; }
+.input-wrap { display: flex; align-items: center; gap: 8px; }
+input[type="number"] { font-family: "IBM Plex Mono", monospace; font-size: 16px; font-weight: 600; text-align: right; width: 90px; padding: 8px 12px; border: 1px solid var(--line-2); border-radius: 8px; color: var(--ink); }
+input[type="number"]:focus { outline: 2px solid var(--sky); border-color: transparent; }
+.unit { color: var(--ink-3); font-size: 14px; }
 
-.sgrid{display:grid;grid-template-columns:1fr;gap:2px 12px}
-@media (min-width:700px){ .sgrid{grid-template-columns:1fr 1fr} }
-@media (min-width:1500px){ .sgrid{grid-template-columns:1fr 1fr 1fr} }
-.srow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;
-  border-bottom:1px dotted var(--line-2)}
-.sname{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.srow.todo .sname{color:var(--ink-3)}
-.gsel{display:flex;gap:2px;flex:none}
-.gsel button{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:700;cursor:pointer;
-  width:25px;height:27px;border-radius:6px;border:1px solid var(--line-2);background:var(--surface);
-  color:var(--ink-3);padding:0;transition:all .12s}
-.gsel button:hover{border-color:var(--sky);color:var(--sky)}
-.gsel button[aria-pressed="true"]{border-color:transparent}
-.gsel button[data-g="A"][aria-pressed="true"]{background:var(--gA);color:var(--onA)}
-.gsel button[data-g="B"][aria-pressed="true"]{background:var(--gB);color:var(--onB)}
-.gsel button[data-g="C"][aria-pressed="true"]{background:var(--gC);color:var(--onC)}
-.gsel button[data-g="D"][aria-pressed="true"]{background:var(--gD);color:var(--onD)}
-.gsel button[data-g="E"][aria-pressed="true"]{background:var(--gE);color:var(--onE)}
-.gsel button[data-g=""][aria-pressed="true"]{background:var(--ink-3);color:var(--surface)}
-.ghost{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:700;padding:1px 6px;border-radius:6px;
-  border:1px dashed currentColor;margin-left:3px}
-.ghost[data-g="A"]{color:var(--gA)} .ghost[data-g="B"]{color:#C9789C}
-.ghost[data-g="C"]{color:var(--sky)} .ghost[data-g="D"]{color:var(--ink-3)} .ghost[data-g="E"]{color:var(--ink-3)}
-.sb-sum{font-size:12.5px;color:var(--ink-2);margin:11px 0 0}
-.sb-sum strong{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--ink)}
+/* ---------- 상태 표시 ---------- */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--line-2); }
+.stat-box { display: flex; flex-direction: column; gap: 4px; }
+.stat-label { font-size: 12px; color: var(--ink-3); }
+.stat-value { font-family: "IBM Plex Mono", monospace; font-size: 24px; font-weight: 700; color: var(--ink); }
+.stat-value.highlight { color: var(--pink); }
 
-details.edit{margin-top:10px}
-details.edit>summary{cursor:pointer;list-style:none;font-size:12.5px;color:var(--sky);font-weight:500;
-  display:inline-block;padding:3px 10px;border-radius:8px;background:var(--sky-soft)}
-details.edit>summary::-webkit-details-marker{display:none}
-details.edit>summary::before{content:"✎ "}
-.editbody{margin-top:10px;padding:12px;border:1px dashed var(--line-2);border-radius:10px;background:var(--surface-2)}
-.chipwrap{display:flex;flex-wrap:wrap;gap:6px}
-.subchip{font:inherit;font-size:12.5px;cursor:pointer;border-radius:20px;padding:4px 12px;
-  border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);transition:all .13s}
-.subchip:hover{border-color:var(--sky);color:var(--sky)}
-.subchip[aria-pressed="true"]{background:var(--pink);border-color:var(--pink);color:var(--pink-ink);font-weight:500}
-.addrow{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap}
-.addrow input{width:148px;font-size:13px;padding:6px 10px}
+/* ---------- 시나리오 테이블 ---------- */
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: right; }
+th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); }
+th { color: var(--ink-3); font-weight: 600; font-size: 12px; border-bottom: 2px solid var(--line-2); }
+th:first-child, td:first-child { text-align: left; }
+tbody td { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+tbody td:first-child { font-family: "IBM Plex Sans KR", sans-serif; font-weight: 500; }
+tbody tr:last-child td { border-bottom: none; }
+.change-up { color: var(--pink); font-weight: 600; font-size: 12.5px; margin-left: 4px; }
+.change-down { color: var(--sky); font-weight: 600; font-size: 12.5px; margin-left: 4px; }
+.change-same { color: var(--ink-3); font-size: 12.5px; margin-left: 4px; }
 
-/* ---------- 지금 서 있는 자리 ---------- */
-.gauge{display:flex;gap:3px;margin:4px 0 9px}
-.gauge span{height:10px;border-radius:3px;background:var(--line-2)}
-.gauge span.on{background:var(--pink)}
-.gauge-lab{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:14px;margin-top:16px}
-.stat{display:flex;flex-direction:column;gap:1px}
-.stat-v{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:23px;font-weight:600;
-  letter-spacing:-.02em;line-height:1.2}
-.stat-v.hi{color:var(--pink)}
-.stat-l{font-size:11.5px;color:var(--ink-3)}
+/* ---------- 직접 조합 ---------- */
+.custom-sim { margin-top: 20px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--line); }
+.custom-sim h3 { margin: 0 0 16px; font-size: 15px; font-weight: 600; }
+.grade-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.grade-input { display: flex; flex-direction: column; gap: 6px; }
+.grade-input label { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 13px; text-align: center; }
+.grade-input input { width: 100%; text-align: center; }
+.custom-result { text-align: center; font-size: 15px; font-weight: 600; color: var(--ink); padding-top: 16px; border-top: 1px dashed var(--line-2); }
+.custom-result span { font-family: "IBM Plex Mono", monospace; font-size: 22px; color: var(--pink); margin: 0 4px; }
 
-/* ---------- 여기까지 가면 돼요 ---------- */
-.target-row{display:flex;align-items:center;gap:10px;margin-bottom:2px}
-.target-row input[type="number"]{width:82px;text-align:right;font:inherit;font-family:"IBM Plex Mono",monospace;
-  font-size:20px;font-weight:600;padding:6px 9px;border-radius:10px;border:1px solid var(--line-2);
-  background:var(--surface);color:var(--ink)}
-.target-row .pct{font-size:15px;font-weight:600;color:var(--ink-2)}
-input[type="range"]{width:100%;accent-color:var(--pink);margin:8px 0 2px}
-.target-eq{font-size:12px;color:var(--ink-3);margin:2px 0 0}
-.verdict{border-radius:12px;padding:15px 17px;border:1px solid transparent;margin-top:15px}
-.verdict.ok{background:var(--pink-soft);border-color:var(--pink)}
-.verdict.tight{background:var(--warn-soft);border-color:var(--warn)}
-.verdict.no{background:var(--danger-soft);border-color:var(--danger)}
-.verdict h3{margin:0 0 3px;font-size:14.5px;font-weight:700;letter-spacing:-.01em}
-.verdict.ok h3{color:var(--pink)} .verdict.tight h3{color:var(--warn)} .verdict.no h3{color:var(--danger)}
-.verdict p{margin:0;font-size:12.8px;color:var(--ink-2)}
-.verdict .big{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:28px;font-weight:600;
-  color:var(--ink);letter-spacing:-.02em;display:block;margin:7px 0 3px}
-
-.needblock{border-bottom:1px solid var(--line);padding:13px 20px}
-.needblock:last-child{border-bottom:none}
-.needblock .nh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px;flex-wrap:wrap}
-.needblock .nh b{font-size:14px;font-weight:600}
-.needblock .nh em{font-style:normal;font-size:11.5px;color:var(--ink-3)}
-.plan{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:3px 18px}
-.planrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;
-  border-bottom:1px dotted var(--line-2);padding:3px 0}
-.pg{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:7px}
-.pg[data-g="A"]{background:var(--gA);color:var(--onA)} .pg[data-g="B"]{background:var(--gB);color:var(--onB)}
-.pg[data-g="C"]{background:var(--gC);color:var(--onC)} .pg[data-g="D"]{background:var(--gD);color:var(--onD)}
-.pg[data-g="E"]{background:var(--gE);color:var(--onE)}
-
-.scroll{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:500px;font-size:13.5px}
-th,td{text-align:right;padding:10px 20px;border-bottom:1px solid var(--line)}
-th:first-child,td:first-child{text-align:left}
-thead th{font-size:11.5px;font-weight:600;letter-spacing:.06em;color:var(--ink-3)}
-tbody td{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
-tbody td:first-child{font-family:"IBM Plex Sans KR",sans-serif;font-weight:500}
-tbody tr:last-child td{border-bottom:none}
-tbody tr.hit{background:var(--pink-soft)}
-tbody tr.hit td:first-child::after{content:"가능해요";font-family:"IBM Plex Sans KR",sans-serif;font-size:10.5px;
-  font-weight:700;color:var(--pink);margin-left:8px}
-
-details.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-details.box>summary{cursor:pointer;padding:14px 20px;font-weight:600;font-size:14px;list-style:none}
-details.box>summary::-webkit-details-marker{display:none}
-details.box>summary::before{content:"＋ ";color:var(--pink);font-weight:700}
-details.box[open]>summary::before{content:"－ "}
-.dbody{padding:16px 20px 20px;border-top:1px solid var(--line)}
-.formula{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--surface-2);
-  padding:12px 14px;border-radius:10px;color:var(--ink-2);overflow-x:auto;white-space:nowrap}
-.note{font-size:12.5px;color:var(--ink-3);max-width:82ch;line-height:1.75;margin:0}
-.note b{color:var(--ink-2)}
-.io textarea{width:100%;min-height:120px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;line-height:1.5;
-  border:1px solid var(--line-2);border-radius:10px;background:var(--surface-2);color:var(--ink);padding:10px;resize:vertical}
-.iorow{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px}
-
-@media print{
-  @page{margin:12mm}
-  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .toolbar,.lede,input[type="range"],.sem-act,.addrow,details.box,details.edit{display:none!important}
-  .app{padding:0;gap:12px;max-width:none}
-  .grid{grid-template-columns:1fr 320px}
-  .col.side{position:static}
-  .card{box-shadow:none;break-inside:avoid}
-  .printhead{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;
-    padding:10px 0;border-bottom:1px solid #999;font-size:13px}
-  .printhead b{font-size:16px}
-  .gsel button{display:none!important}
-  .gsel button[aria-pressed="true"]{display:inline-block!important;border:1px solid #999}
-}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.note { font-size: 12.5px; color: var(--ink-3); margin-top: 16px; line-height: 1.5; }
 </style>
 </head>
 <body>
 
 <div class="app">
-
   <header class="masthead">
-    <div>
-      <p class="eyebrow">중3 진로상담용 내신 석차백분률 예측 프로그램</p>
-      <h1>중학교 3학년을 위한 <em>꿈의 좌표</em></h1>
-      <p class="lede">배운 과목과 지금까지 나온 성취도를 입력하면, <br>목표한 곳에 닿기 위해 남은 과목에서 무엇을 받아야 하는지를 알려줍니다.</p>
-    </div>
-    <div class="toolbar">
-      <div class="trow">
-        <input type="text" id="stuName" placeholder="학생 이름" aria-label="학생 이름">
-        <button class="btn btn-primary" id="saveFile">저장 (폴더 선택)</button>
-        <button class="btn" id="quickSave" hidden>보관함에 바로 저장</button>
-        <button class="btn" id="openFile">파일 열기</button>
-        <input type="file" id="filePick" accept=".json,application/json" hidden>
-        <button class="btn" id="print">인쇄 · PDF</button>
-        <button class="btn" id="reset">새 학생</button>
-      </div>
-      <div class="trow sub" id="fsRow" hidden>
-        <span class="tlab">보관함 폴더</span>
-        <span class="folder" id="folderName">미지정</span>
-        <button class="btn btn-sm" id="pickDir">폴더 지정…</button>
-        <select id="fileList" aria-label="보관함의 학생 파일"><option value="">보관함 학생…</option></select>
-        <button class="btn btn-sm" id="loadDir">불러오기</button>
-        <button class="btn btn-sm" id="delDir">삭제</button>
-      </div>
-      <div class="trow sub" id="lsRow" hidden>
-        <span class="tlab">이 브라우저에 임시 저장</span>
-        <button class="btn btn-sm" id="lsSaveBtn">저장</button>
-        <select id="stuList" aria-label="저장된 학생"><option value="">목록…</option></select>
-        <button class="btn btn-sm" id="lsLoadBtn">불러오기</button>
-        <button class="btn btn-sm" id="lsDelBtn">삭제</button>
-      </div>
-    </div>
+    <p class="eyebrow">진로진학 상담용 내신 산출기</p>
+    <h1>중3 최종 석차 예측 프로그램</h1>
+    <p class="lede">현재까지의 등수를 기반으로 환산점수를 산출하고, 남은 학기의 성적(A~E) 조합에 따른 최종 석차 변동을 예측합니다.</p>
   </header>
 
-  <div class="printhead" id="printhead"></div>
-
   <div class="grid">
-    <div class="col">
-
-      <section class="card">
-        <div class="card-h">
-          <h2>지금까지의 성적</h2>
-          <span class="hint">과목 편성과 성취도를 한자리에서 — 아직 안 나온 과목은 <b>–</b> 로 두세요</span>
+    <!-- 왼쪽: 기본 정보 입력 -->
+    <section class="card">
+      <div class="card-h">현재 성적 현황 입력</div>
+      <div class="card-body">
+        <div class="input-group">
+          <div class="input-row">
+            <label for="totalStudents">3학년 전체 인원</label>
+            <div class="input-wrap">
+              <input type="number" id="totalStudents" value="200" min="10">
+              <span class="unit">명</span>
+            </div>
+          </div>
+          <div class="input-row">
+            <label for="currentRank">현재 석차</label>
+            <div class="input-wrap">
+              <input type="number" id="currentRank" value="40" min="1">
+              <span class="unit">등</span>
+            </div>
+          </div>
+          <div class="input-row" style="margin-top: 12px;">
+            <label for="weightCompleted" style="color:var(--ink-2); font-size:13px;">누적 학기 반영비율</label>
+            <div class="input-wrap">
+              <input type="number" id="weightCompleted" value="75" min="10" max="90" style="width: 70px; font-size: 14px; padding: 6px;">
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <div class="input-row">
+            <label for="subjCount" style="color:var(--ink-2); font-size:13px;">남은 학기 과목 수</label>
+            <div class="input-wrap">
+              <input type="number" id="subjCount" value="8" min="1" max="15" style="width: 70px; font-size: 14px; padding: 6px;">
+              <span class="unit">과목</span>
+            </div>
+          </div>
         </div>
-        <div id="sems"></div>
-      </section>
 
-      <section class="card">
-        <div class="card-h">
-          <h2>과목마다 이만큼씩</h2>
-          <span class="hint">목표에 닿기 위한 최소 성취도</span>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-label">현재 누적 석차백분율</span>
+            <span class="stat-value highlight" id="outCurPercentile">20.00%</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">현재 누적 환산평균</span>
+            <span class="stat-value" id="outCurAvg">4.20 / 5.0</span>
+          </div>
         </div>
-        <div id="need"></div>
-      </section>
-
-      <section class="card">
-        <div class="card-h">
-          <h2>남은 과목을 이렇게 받으면</h2>
-          <span class="hint">남은 과목 전체를 같은 수준으로 받았을 때</span>
-        </div>
-        <div class="scroll">
-          <table>
-            <thead><tr><th>남은 과목 성취도</th><th>환산평균</th><th>교과성적</th><th>백분율</th></tr></thead>
-            <tbody id="scen"></tbody>
-          </table>
-        </div>
-      </section>
-
-    </div>
-
-    <aside class="col side">
-
-      <section class="card pad">
-        <div class="card-h" style="padding:0 0 13px;margin-bottom:13px;background:none">
-          <h2>지금 서 있는 자리</h2>
-        </div>
-        <div class="gauge" id="gauge"></div>
-        <div class="gauge-lab"><span id="lockedLab">확정 배점</span><span id="openLab">남은 배점</span></div>
-        <div class="stats">
-          <div class="stat"><span class="stat-v hi" id="nowPct">–</span><span class="stat-l">석차백분율(추정)</span></div>
-          <div class="stat"><span class="stat-v" id="nowAvg">–</span><span class="stat-l">환산평균 / 5.0</span></div>
-          <div class="stat"><span class="stat-v" id="nowScore">–</span><span class="stat-l">교과성적 / 240</span></div>
-          <div class="stat"><span class="stat-v" id="doneCnt">–</span><span class="stat-l">입력한 과목</span></div>
-        </div>
-      </section>
-
-      <section class="card pad">
-        <div class="card-h" style="padding:0 0 13px;margin-bottom:13px;background:none">
-          <h2>여기까지 가면 돼요</h2>
-          <span class="hint">상위 %</span>
-        </div>
-        <div class="target-row">
-          <input type="number" id="targetNum" min="0.1" max="99" step="0.1" value="20">
-          <span class="pct">% 안에 들기</span>
-        </div>
-        <input type="range" id="targetRange" min="1" max="70" step="0.5" value="20" aria-label="목표 석차백분율">
-        <p class="target-eq" id="targetEq"></p>
-        <div id="verdict"></div>
-      </section>
-
-    </aside>
-  </div>
-
-  <details class="box">
-    <summary>반영비율 · 산출식</summary>
-    <div class="dbody">
-      <div class="formula" id="formulaBox"></div>
-      <p class="note" style="margin-top:14px">
-        <b>기본점수</b> 96점(40%). <b>성취도 환산점 평균</b> 144점(60%). 합쳐서 240점 만점.<br>
-        <b>학기 배점</b> 1학년 20%, 2학년 30%, 3학년 50%이고 각 학기는 해당 학년 배점의 절반 — 1-1 10%, 1-2 10%, 2-1 15%, 2-2 15%, 3-1 25%, 3-2 25%.<br>
-        <b>자유학기 환산</b> 교과성적이 있는 학기의 반영비율 총합을 100%로 환산합니다. 1학년 2학기가 자유학기면 90% → ×100/90.<br>
-        <b>환산점</b> A 5.0 · B 4.0 · C 3.0 · D 2.0 · E 1.0. 학기 환산점 평균 = 성취도 환산점 총합 ÷ 이수 과목 수.<br>
-        <b>석차백분율</b> (5 − 환산평균) ÷ 4 × 100으로 낸 <b>추정치</b>입니다. 성취평가제 성취도에는 석차 정보가 없어 실제 학교 석차백분율과는 다릅니다. 목표까지 얼마나 올려야 하는지를 가늠하는 상담용 지표로만 쓰고, 확정 수치는 학교에서 발급하는 성적 자료로 확인하세요. 교과성적(240점)과 환산평균은 공식 산출식 그대로라 정확합니다.
-      </p>
-    </div>
-  </details>
-
-  <details class="box io">
-    <summary>자료 내보내기 · 가져오기 (복사·붙여넣기)</summary>
-    <div class="dbody">
-      <p class="note" style="margin-bottom:10px">파일 저장이 막힌 환경에서는 아래 내용을 복사해 메모장에 붙여넣어 <code>.json</code>으로 보관하고, 다시 쓸 때 여기에 붙여넣은 뒤 [붙여넣기 적용]을 누르세요.</p>
-      <textarea id="rawBox" spellcheck="false" aria-label="자료 JSON"></textarea>
-      <div class="iorow">
-        <span style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-sm" id="rawDump">현재 자료 채우기</button>
-          <button class="btn btn-sm" id="rawCopy">복사</button>
-        </span>
-        <button class="btn btn-sm btn-primary" id="rawApply">붙여넣기 적용</button>
       </div>
-    </div>
-  </details>
+    </section>
 
-  <p class="note" id="msg">[저장]을 누르면 원하는 폴더를 고르는 창이 열립니다. [폴더 지정…]으로 보관함 폴더를 정해 두면 그 폴더의 학생 파일이 목록에 뜨고, [보관함에 바로 저장]으로 창 없이 저장할 수 있습니다. 자료는 이 컴퓨터 밖으로 전송되지 않습니다.</p>
+    <!-- 오른쪽: 예상 시나리오 -->
+    <section class="card">
+      <div class="card-h">남은 학기 성적에 따른 최종 예상</div>
+      <div class="card-body" style="padding-top: 12px;">
+        <table>
+          <thead>
+            <tr>
+              <th>남은 학기 성취도</th>
+              <th>예상 백분율</th>
+              <th>최종 예상 석차</th>
+            </tr>
+          </thead>
+          <tbody id="scenarioTable">
+            <!-- JS로 렌더링됨 -->
+          </tbody>
+        </table>
+
+        <div class="custom-sim">
+          <h3>직접 과목 조합해보기 (총 <span id="customTotal">8</span>과목)</h3>
+          <div class="grade-inputs">
+            <div class="grade-input"><label>A (5점)</label><input type="number" id="gA" value="8" min="0"></div>
+            <div class="grade-input"><label>B (4점)</label><input type="number" id="gB" value="0" min="0"></div>
+            <div class="grade-input"><label>C (3점)</label><input type="number" id="gC" value="0" min="0"></div>
+            <div class="grade-input"><label>D/E</label><input type="number" id="gD" value="0" min="0" title="D와 E는 편의상 2점으로 합산 처리"></div>
+          </div>
+          <div class="custom-result">
+            이대로 받으면 최종 <span id="customRank">30</span>등 예상 
+            <span id="customChange" style="font-size: 14px; font-weight: normal;">(▲ 10등)</span>
+          </div>
+        </div>
+        
+        <p class="note">※ 본 시나리오는 5.0 환산 체계를 역산한 추정치로, 동점자 처리 규정 등에 따라 실제 학교 발급 성적표와 미세한 오차가 발생할 수 있습니다. 진학 상담 참고용으로만 활용 바랍니다.</p>
+      </div>
+    </section>
+  </div>
 </div>
 
 <script>
-(function () {
-  "use strict";
-
-  /* ======================================================================
-     1. 설정 — 학교 사정에 맞추려면 여기만 고치면 됩니다
-     ====================================================================== */
-  var SEMS = [
-    { id: "s11", label: "1학년 1학기", short: "1-1", w: 10 },
-    { id: "s12", label: "1학년 2학기", short: "1-2", w: 10 },
-    { id: "s21", label: "2학년 1학기", short: "2-1", w: 15 },
-    { id: "s22", label: "2학년 2학기", short: "2-2", w: 15 },
-    { id: "s31", label: "3학년 1학기", short: "3-1", w: 25 },
-    { id: "s32", label: "3학년 2학기", short: "3-2", w: 25 }
-  ];
-  var GRADES = ["A", "B", "C", "D", "E"];
-  var GRADE_VALUE = { A: 5, B: 4, C: 3, D: 2, E: 1 };
-  var MAX_POINT = 5, MIN_POINT = 1;
-  var BASE_SCORE = 96, VAR_SCORE = 144;
-  var COEF_PER_WEIGHT = 0.288;           // 학기 계수 = 배점 ÷ 5
-  var DEFAULT_FREE = ["s12"];            // 자유학기 기본값
-  var DEFAULT_TARGET = 20;
-
-  var SUBJECT_POOL = ["국어","도덕","사회","역사","수학","과학","기술·가정","정보",
-                      "체육","음악","미술","영어","한문","제2외국어","환경","보건"];
-  var SEM_PRESET = {
-    s11: ["국어","도덕","사회","수학","과학","기술·가정","체육","음악","미술","영어"],
-    s12: [],
-    s21: ["국어","도덕","사회","역사","수학","과학","기술·가정","정보","체육","음악","미술","영어"],
-    s22: ["국어","도덕","사회","역사","수학","과학","기술·가정","정보","체육","음악","미술","영어"],
-    s31: ["국어","사회","역사","수학","과학","기술·가정","체육","음악","미술","영어"],
-    s32: ["국어","사회","역사","수학","과학","기술·가정","체육","음악","미술","영어"]
+(function() {
+  const els = {
+    N: document.getElementById('totalStudents'),
+    R: document.getElementById('currentRank'),
+    W: document.getElementById('weightCompleted'),
+    S: document.getElementById('subjCount'),
+    outCurPct: document.getElementById('outCurPercentile'),
+    outCurAvg: document.getElementById('outCurAvg'),
+    scenTable: document.getElementById('scenarioTable'),
+    customTotal: document.getElementById('customTotal'),
+    gA: document.getElementById('gA'),
+    gB: document.getElementById('gB'),
+    gC: document.getElementById('gC'),
+    gD: document.getElementById('gD'),
+    customRank: document.getElementById('customRank'),
+    customChange: document.getElementById('customChange')
   };
-  var SCENARIOS = [["전부 A",5],["A·B 절반씩",4.5],["전부 B",4],["B·C 절반씩",3.5],["전부 C",3]];
 
-  var LS_KEY = "naeshin.students.v3";
-  var IDB_NAME = "naeshin-fs", IDB_STORE = "h", IDB_KEY = "dir";
+  // 대구 등 일반적인 백분율 산출 공식: 백분율 = (5 - 환산평균) / 4 * 100
+  // 따라서, 환산평균 = 5 - (백분율 * 4 / 100)
+  
+  function calculate() {
+    let totalN = parseInt(els.N.value) || 200;
+    let curR = parseInt(els.R.value) || 40;
+    let weightCur = (parseFloat(els.W.value) || 75) / 100;
+    let weightRem = 1.0 - weightCur;
+    let subjs = parseInt(els.S.value) || 8;
 
-  /* ======================================================================
-     2. 잡일
-     ====================================================================== */
-  function byId(id) { return document.getElementById(id); }
-  function esc(s) {
-    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-  function fmt(v, d) {
-    if (v === null || v === undefined || isNaN(v)) return "–";
-    return Number(v).toFixed(d === undefined ? 1 : d);
-  }
-  function msg(t) { byId("msg").textContent = t; }
-  function safeFileName(n) {
-    return String(n || "학생").trim().replace(/[\\/:*?"<>|]/g, "_") || "학생";
-  }
-  function delegate(root, type, sel, fn) {
-    root.addEventListener(type, function (e) {
-      var t = e.target.closest(sel);
-      if (t && root.contains(t)) fn(e, t);
-    });
-  }
+    // 현재 상태 역산
+    let curPct = (curR / totalN) * 100;
+    let curAvg = 5 - (curPct * 4 / 100);
 
-  /* ======================================================================
-     3. 계산 엔진
-       교과성적 = 96 + (100/TW) × Σ(0.288·wᵢ × 학기평균)  =  96 + 144 × M/5
-       M(환산평균) = Σ(wᵢ × 학기평균) / TW
-     ====================================================================== */
-  function activeSems() { return SEMS.filter(function (s) { return !state.free[s.id]; }); }
-  function totalWeight() {
-    return activeSems().reduce(function (a, s) { return a + s.w; }, 0);
-  }
-  function semStats(list) {
-    var total = list.length, points = 0, graded = 0;
-    list.forEach(function (x) { if (x.g) { points += GRADE_VALUE[x.g]; graded++; } });
-    return { total: total, graded: graded, ungraded: total - graded, points: points,
-             avg: graded > 0 ? points / graded : null };
-  }
-  // 과목 단위 집계 — 한 학기에서 일부 과목만 나온 경우도 정확히 처리
-  function aggregate() {
-    var TW = totalWeight(), K = 0, C = 0, GW = 0, gradedCount = 0, totalCount = 0, remaining = [];
-    activeSems().forEach(function (sem) {
-      var list = state.sems[sem.id] || [], st = semStats(list);
-      totalCount += st.total; gradedCount += st.graded;
-      if (st.total === 0) return;
-      K  += sem.w * st.points / st.total;
-      C  += sem.w * st.ungraded / st.total;
-      GW += sem.w * st.graded / st.total;
-      if (st.ungraded > 0) {
-        remaining.push({ sem: sem, subjects: list.filter(function (x) { return !x.g; }) });
-      }
-    });
-    return { TW: TW, K: K, C: C, GW: GW, gradedCount: gradedCount, totalCount: totalCount,
-             remaining: remaining,
-             nowM: GW > 0 ? K / GW : null,
-             finalM: function (x) { return TW > 0 ? (K + x * C) / TW : null; } };
-  }
-  function scoreOf(M) { return BASE_SCORE + VAR_SCORE * (M / MAX_POINT); }
-  function percentileOf(M) { return (MAX_POINT - M) / (MAX_POINT - MIN_POINT) * 100; }
-  function mOfPercentile(p) { return MAX_POINT - (MAX_POINT - MIN_POINT) * p / 100; }
-  function requiredAverage(agg, target) {
-    if (agg.C <= 0 || agg.TW <= 0) return null;
-    return (mOfPercentile(target) * agg.TW - agg.K) / agg.C;
-  }
-  // u개 과목에서 평균 x 이상을 만드는 최소 조합 (두 등급만 섞임)
-  function planGrades(u, x) {
-    if (!(u > 0)) return [];
-    var T = Math.ceil(x * u - 1e-9);
-    T = Math.max(u * MIN_POINT, Math.min(u * MAX_POINT, T));
-    var q = Math.floor(T / u), r = T - q * u, out = [], i;
-    for (i = 0; i < r; i++) out.push(GRADES[MAX_POINT - (q + 1)]);
-    for (i = 0; i < u - r; i++) out.push(GRADES[MAX_POINT - q]);
-    return out;
-  }
-  function verdictOf(agg, target) {
-    if (agg.TW === 0 || agg.totalCount === 0) return { kind: "empty" };
-    if (agg.C <= 0) {
-      var M = agg.K / agg.TW;
-      return { kind: "done", M: M, pct: percentileOf(M), hit: percentileOf(M) <= target };
-    }
-    var x = requiredAverage(agg, target);
-    var best = percentileOf(agg.finalM(MAX_POINT));
-    var worst = percentileOf(agg.finalM(MIN_POINT));
-    if (x > MAX_POINT + 1e-4) return { kind: "impossible", best: best, worst: worst, x: x };
-    if (x <= MIN_POINT + 1e-4) return { kind: "already", best: best, worst: worst, x: MIN_POINT };
-    return { kind: x >= 4.5 ? "tight" : "ok", best: best, worst: worst, x: x };
-  }
-  function formulaText() {
-    var TW = totalWeight();
-    var terms = activeSems().map(function (s) {
-      return (COEF_PER_WEIGHT * s.w).toFixed(2).replace(/\.?0+$/, "") + "×" + s.short + "평균";
-    }).join(" + ");
-    return "교과성적 = 96 + (100/" + TW + ") × ( " + terms + " )" +
-           "      A 5.0 · B 4.0 · C 3.0 · D 2.0 · E 1.0";
-  }
+    els.outCurPct.textContent = curPct.toFixed(2) + '%';
+    els.outCurAvg.textContent = curAvg.toFixed(2) + ' / 5.0';
+    els.customTotal.textContent = subjs;
 
-  /* ======================================================================
-     4. 상태
-     ====================================================================== */
-  function freshState() {
-    var s = { free: {}, sems: {}, target: DEFAULT_TARGET };
-    SEMS.forEach(function (sem) {
-      s.free[sem.id] = DEFAULT_FREE.indexOf(sem.id) >= 0;
-      s.sems[sem.id] = (SEM_PRESET[sem.id] || []).map(function (n) { return { n: n, g: null }; });
-    });
-    return s;
-  }
-  var state = freshState();
-
-  function serialize() {
-    return JSON.stringify({
-      app: "naeshin-relay-v3",
-      name: byId("stuName").value.trim(),
-      savedAt: new Date().toISOString(),
-      data: state
-    }, null, 2);
-  }
-  function applyJSON(text) {
-    try {
-      var o = JSON.parse(text), d = (o && o.data) ? o.data : o;
-      if (!d || !d.sems || !d.free) throw new Error("format");
-      SEMS.forEach(function (sem) {
-        if (!(sem.id in d.free)) d.free[sem.id] = false;
-        if (!Array.isArray(d.sems[sem.id])) d.sems[sem.id] = [];
-      });
-      if (!d.target) d.target = DEFAULT_TARGET;
-      state = d;
-      if (o && o.name) byId("stuName").value = o.name;
-      syncTarget();
-      renderAll();
-      msg("자료를 불러왔습니다" + (o && o.name ? " — " + o.name : "") + ".");
-      return true;
-    } catch (e) {
-      msg("읽지 못했습니다. 이 앱에서 저장한 .json 파일인지 확인하세요.");
-      return false;
-    }
-  }
-
-  /* ======================================================================
-     5. 학기 블록 — 과목 편성과 성취도를 한자리에
-     ====================================================================== */
-  var semsEl = byId("sems");
-
-  function renderSems() {
-    var TW = totalWeight(), agg = aggregate();
-    var need = requiredAverage(agg, state.target);
-    if (need !== null) need = Math.min(Math.max(need, MIN_POINT), MAX_POINT);
-
-    semsEl.innerHTML = SEMS.map(function (sem) {
-      var free = state.free[sem.id];
-      var list = state.sems[sem.id];
-      var head =
-        '<div class="sem-h">' +
-          '<div class="sem-id"><b>' + sem.label + '</b>' +
-          '<span class="wpill">' + (free ? "반영 제외" : (sem.w / TW * 100).toFixed(1) + "%") + '</span></div>' +
-          '<div class="sem-act">' +
-            '<label class="toggle"><input type="checkbox" data-act="free"' + (free ? " checked" : "") + '> 자유학기</label>' +
-            (free ? "" :
-              '<button class="btn btn-sm" data-act="allA">전체 A</button>' +
-              '<button class="btn btn-sm" data-act="clearG">성취도 지우기</button>') +
-          '</div>' +
-        '</div>';
-
-      if (free) {
-        return '<div class="sem free" data-id="' + sem.id + '">' + head +
-          '<div class="sem-body">자유학기 — 성취도 산출 없음. 반영비율 ' + sem.w +
-          '%가 빠지고 나머지 학기가 100%로 환산됩니다.</div></div>';
-      }
-
-      // 과목 편성 칩 (기본 풀 + 직접 추가한 과목)
-      var names = list.map(function (x) { return x.n; });
-      var pool = SUBJECT_POOL.slice();
-      names.forEach(function (n) { if (pool.indexOf(n) < 0) pool.push(n); });
-      var chips = pool.map(function (n) {
-        return '<button class="subchip" data-act="chip" data-n="' + esc(n) + '" aria-pressed="' +
-               (names.indexOf(n) >= 0) + '">' + esc(n) + '</button>';
-      }).join("");
-
-      var body;
-      if (!list.length) {
-        body = '<p class="sb-sum">아래 [과목 편성 고치기]에서 이 학기에 배운 과목을 골라 주세요.</p>';
-      } else {
-        var ghosts = need === null ? [] : planGrades(semStats(list).ungraded, need);
-        var gi = 0;
-        var rows = list.map(function (sub, i) {
-          var buttons = GRADES.map(function (g) {
-            return '<button data-act="grade" data-i="' + i + '" data-g="' + g + '" aria-pressed="' +
-                   (sub.g === g) + '" aria-label="' + esc(sub.n) + ' ' + g + '">' + g + '</button>';
-          }).join("");
-          var ghost = "";
-          if (!sub.g && ghosts.length) {
-            var gg = ghosts[gi++];
-            ghost = ' <span class="ghost" data-g="' + gg + '" title="목표에 닿기 위한 최소 성취도">' + gg + '</span>';
-          }
-          return '<div class="srow' + (sub.g ? "" : " todo") + '">' +
-            '<span class="sname">' + esc(sub.n) + ghost + '</span>' +
-            '<span class="gsel">' +
-              '<button data-act="grade" data-i="' + i + '" data-g="" aria-pressed="' + (!sub.g) +
-              '" aria-label="' + esc(sub.n) + ' 미정">–</button>' + buttons +
-            '</span></div>';
-        }).join("");
-
-        var st = semStats(list);
-        body = '<div class="sgrid">' + rows + '</div>' +
-          '<p class="sb-sum">' + st.total + '과목 중 <strong>' + st.graded + '</strong>과목 입력' +
-          (st.avg !== null ? ' · 입력분 평균 <strong>' + st.avg.toFixed(2) + '</strong>' : '') + '</p>';
-      }
-
-      return '<div class="sem" data-id="' + sem.id + '">' + head +
-        '<div class="sem-body">' + body +
-          '<details class="edit"><summary>과목 편성 고치기</summary>' +
-            '<div class="editbody">' +
-              '<div class="chipwrap">' + chips + '</div>' +
-              '<div class="addrow">' +
-                '<input type="text" data-act="newname" placeholder="과목 직접 추가" aria-label="' + sem.label + ' 과목 추가">' +
-                '<button class="btn btn-sm" data-act="add">추가</button>' +
-                '<button class="btn btn-sm" data-act="copy">직전 학기 복사</button>' +
-                '<button class="btn btn-sm" data-act="clear">과목 모두 비우기</button>' +
-              '</div>' +
-            '</div>' +
-          '</details>' +
-        '</div></div>';
-    }).join("");
-  }
-
-  // 다시 그린 뒤 열려 있던 [과목 편성 고치기]와 포커스·스크롤을 되돌려 놓습니다.
-  function renderSemsKeeping(focusSel) {
-    var openIds = [];
-    Array.prototype.forEach.call(semsEl.querySelectorAll(".sem details.edit[open]"), function (d) {
-      openIds.push(d.closest(".sem").dataset.id);
-    });
-    var scrollY = window.scrollY;
-    renderSems();
-    openIds.forEach(function (id) {
-      var d = semsEl.querySelector('.sem[data-id="' + id + '"] details.edit');
-      if (d) d.open = true;
-    });
-    if (focusSel) {
-      var back = semsEl.querySelector(focusSel);
-      if (back) back.focus({ preventScroll: true });
-    }
-    window.scrollTo(0, scrollY);
-  }
-
-  delegate(semsEl, "click", "[data-act]", function (e, t) {
-    var semEl = t.closest(".sem"); if (!semEl) return;
-    var id = semEl.dataset.id, list = state.sems[id], act = t.dataset.act;
-    var focusSel = null;
-
-    if (act === "grade") {
-      var i = +t.dataset.i, g = t.dataset.g || null;
-      list[i].g = (list[i].g === g) ? null : g;
-      focusSel = '.sem[data-id="' + id + '"] [data-act="grade"][data-i="' + i + '"][data-g="' + t.dataset.g + '"]';
-    } else if (act === "allA") {
-      list.forEach(function (x) { x.g = "A"; });
-    } else if (act === "clearG") {
-      list.forEach(function (x) { x.g = null; });
-    } else if (act === "chip") {
-      var n = t.dataset.n, k = -1;
-      list.forEach(function (x, idx) { if (x.n === n) k = idx; });
-      if (k >= 0) list.splice(k, 1); else list.push({ n: n, g: null });
-      focusSel = '.sem[data-id="' + id + '"] [data-act="chip"][data-n="' + esc(n) + '"]';
-    } else if (act === "add") {
-      var input = semEl.querySelector('[data-act="newname"]');
-      if (!addSubject(id, input.value)) { msg("비어 있거나 이미 있는 과목입니다."); return; }
-    } else if (act === "clear") {
-      state.sems[id] = [];
-    } else if (act === "copy") {
-      if (!copyPrev(id)) { msg("복사할 직전 학기 과목이 없습니다."); return; }
-    } else {
-      return;
-    }
-    renderSemsKeeping(focusSel);
-    renderResults();
-  });
-
-  semsEl.addEventListener("keydown", function (e) {
-    if (e.key !== "Enter" || e.target.dataset.act !== "newname") return;
-    e.preventDefault();
-    var id = e.target.closest(".sem").dataset.id;
-    if (addSubject(id, e.target.value)) { renderSemsKeeping(null); renderResults(); }
-    else msg("비어 있거나 이미 있는 과목입니다.");
-  });
-
-  semsEl.addEventListener("change", function (e) {
-    if (e.target.dataset.act !== "free") return;
-    var id = e.target.closest(".sem").dataset.id;
-    state.free[id] = e.target.checked;
-    if (e.target.checked) state.sems[id] = [];
-    else if (!state.sems[id].length) {
-      state.sems[id] = (SEM_PRESET[id] || []).map(function (n) { return { n: n, g: null }; });
-    }
-    renderSemsKeeping(null);
-    renderResults();
-  });
-
-  function addSubject(id, raw) {
-    var n = String(raw || "").trim();
-    if (!n) return false;
-    var list = state.sems[id], dup = false;
-    list.forEach(function (x) { if (x.n === n) dup = true; });
-    if (dup) return false;
-    list.push({ n: n, g: null });
-    return true;
-  }
-  function copyPrev(id) {
-    var idx = -1;
-    SEMS.forEach(function (s, i) { if (s.id === id) idx = i; });
-    for (var j = idx - 1; j >= 0; j--) {
-      var prev = SEMS[j].id;
-      if (!state.free[prev] && state.sems[prev].length) {
-        state.sems[id] = state.sems[prev].map(function (x) { return { n: x.n, g: null }; });
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /* ======================================================================
-     6. 결과 — 지금 서 있는 자리 / 여기까지 가면 돼요
-     ====================================================================== */
-  function renderResults() {
-    var agg = aggregate(), TW = agg.TW;
-
-    byId("gauge").innerHTML = activeSems().map(function (sem) {
-      var list = state.sems[sem.id];
-      var frac = list.length ? list.filter(function (x) { return x.g; }).length / list.length : 0;
-      var a = '<span class="on" style="flex:' + (sem.w * Math.max(frac, 0.0001)) + '" title="' + sem.label + '"></span>';
-      var b = frac < 1 ? '<span style="flex:' + (sem.w * (1 - frac)) + '" title="' + sem.label + '"></span>' : "";
-      return a + b;
-    }).join("");
-    byId("lockedLab").textContent = "확정 " + (TW > 0 ? (agg.GW / TW * 100).toFixed(0) : 0) + "%";
-    byId("openLab").textContent   = "남은 " + (TW > 0 ? (agg.C / TW * 100).toFixed(0) : 0) + "%";
-
-    var M = agg.nowM;
-    byId("nowPct").textContent   = M === null ? "–" : fmt(percentileOf(M), 1) + "%";
-    byId("nowAvg").textContent   = M === null ? "–" : fmt(M, 2);
-    byId("nowScore").textContent = M === null ? "–" : fmt(scoreOf(M), 1);
-    byId("doneCnt").textContent  = agg.gradedCount + " / " + agg.totalCount;
-
-    var Mt = mOfPercentile(state.target);
-    byId("targetEq").textContent = "= 환산평균 " + fmt(Mt, 2) + " · 교과성적 " + fmt(scoreOf(Mt), 1) + "점 / 240";
-
-    // 판정
-    var v = verdictOf(agg, state.target), box = byId("verdict");
-    if (v.kind === "empty") {
-      box.className = "verdict tight";
-      box.innerHTML = "<h3>과목을 먼저 골라 주세요</h3><p>학기마다 [과목 편성 고치기]에서 배운 과목을 고르면 계산이 시작됩니다.</p>";
-    } else if (v.kind === "done") {
-      box.className = "verdict " + (v.hit ? "ok" : "no");
-      box.innerHTML = "<h3>" + (v.hit ? "목표한 곳에 닿았어요" : "여기까지 왔습니다") + "</h3>" +
-        "<span class='big'>" + fmt(v.pct, 1) + "%</span>" +
-        "<p>최종 환산평균 " + fmt(v.M, 2) + " · 교과성적 " + fmt(scoreOf(v.M), 1) + "점. " +
-        "목표 " + fmt(state.target, 1) + "% " + (v.hit ? "달성" : "미달") + "입니다.</p>";
-    } else if (v.kind === "impossible") {
-      box.className = "verdict no";
-      box.innerHTML = "<h3>남은 과목만으로는 조금 멀어요</h3>" +
-        "<span class='big'>" + fmt(v.best, 1) + "%</span>" +
-        "<p>남은 과목을 전부 A로 받아도 " + fmt(v.best, 1) + "%가 최선입니다. " +
-        "목표를 " + fmt(Math.ceil(v.best * 10) / 10, 1) + "% 근처로 다시 잡아 볼까요.</p>";
-    } else {
-      var title = v.kind === "already" ? "이미 그 안에 들어와 있어요"
-                : v.kind === "tight"   ? "닿을 수 있어요, 다만 빠듯합니다"
-                : "충분히 닿을 수 있어요";
-      var left = agg.remaining.reduce(function (a, r) { return a + r.subjects.length; }, 0);
-      box.className = "verdict " + (v.kind === "tight" ? "tight" : "ok");
-      box.innerHTML = "<h3>" + title + "</h3>" +
-        "<span class='big'>" + fmt(v.x, 2) + " / 5.0</span>" +
-        "<p>남은 " + left + "개 과목의 평균 환산점이 이만큼이면 목표 " + fmt(state.target, 1) + "%에 닿습니다. " +
-        "전부 A면 " + fmt(v.best, 1) + "%, 전부 E면 " + fmt(v.worst, 1) + "%.</p>";
-    }
-
-    // 과목마다 이만큼씩
-    var need = byId("need");
-    var empty = function (t) {
-      return '<div class="needblock" style="color:var(--ink-3);font-size:13px">' + t + '</div>';
+    // 시나리오 생성 함수
+    const getSimResult = (remAvg) => {
+      let finalAvg = (curAvg * weightCur) + (remAvg * weightRem);
+      let finalPct = ((5 - finalAvg) / 4) * 100;
+      let finalRank = Math.round((finalPct / 100) * totalN);
+      let diff = curR - finalRank;
+      
+      let diffStr = diff > 0 ? `<span class="change-up">▲ ${diff}등</span>` : 
+                    diff < 0 ? `<span class="change-down">▼ ${Math.abs(diff)}등</span>` : 
+                    `<span class="change-same">- 유지</span>`;
+                    
+      return { avg: finalAvg, pct: finalPct, rank: finalRank, diffStr: diffStr, diffVal: diff };
     };
-    if (TW === 0 || agg.totalCount === 0) {
-      need.innerHTML = empty("아직 계산할 내용이 없습니다.");
-    } else if (agg.C <= 0) {
-      need.innerHTML = empty("남은 과목이 없습니다. 모든 과목의 성취도가 입력되었어요.");
+
+    // 고정 시나리오 표 업데이트
+    const scenarios = [
+      { label: "전과목 A", avg: 5.0 },
+      { label: "A 절반, B 절반", avg: 4.5 },
+      { label: "전과목 B", avg: 4.0 },
+      { label: "전과목 C", avg: 3.0 }
+    ];
+
+    els.scenTable.innerHTML = scenarios.map(s => {
+      let res = getSimResult(s.avg);
+      return `<tr>
+                <td>${s.label} <span style="color:#8598AB; font-size:11px;">(${s.avg}점)</span></td>
+                <td>${res.pct.toFixed(2)}%</td>
+                <td>${res.rank}등 ${res.diffStr}</td>
+              </tr>`;
+    }).join('');
+
+    // 직접 조합 계산
+    let cA = parseInt(els.gA.value) || 0;
+    let cB = parseInt(els.gB.value) || 0;
+    let cC = parseInt(els.gC.value) || 0;
+    let cD = parseInt(els.gD.value) || 0;
+    let sumCount = cA + cB + cC + cD;
+
+    // 과목 수가 초과/부족한 경우 시각적 보정 (실제 연산에서는 입력된 총 과목수를 분모로 씀)
+    let actualSubjs = sumCount > 0 ? sumCount : 1; 
+    let customRemAvg = ((cA * 5) + (cB * 4) + (cC * 3) + (cD * 2)) / actualSubjs;
+    
+    let cRes = getSimResult(customRemAvg);
+    els.customRank.textContent = cRes.rank;
+    
+    if (sumCount !== subjs) {
+        els.customChange.innerHTML = `<span style="color:var(--warn);">(입력된 과목 합계가 ${subjs}개가 아닙니다)</span>`;
     } else {
-      var x = Math.min(Math.max(requiredAverage(agg, state.target), MIN_POINT), MAX_POINT);
-      need.innerHTML = agg.remaining.map(function (r) {
-        var plan = planGrades(r.subjects.length, x);
-        var rows = r.subjects.map(function (sub, i) {
-          return '<div class="planrow"><span>' + esc(sub.n) + '</span>' +
-                 '<span class="pg" data-g="' + plan[i] + '">' + plan[i] + '</span></div>';
-        }).join("");
-        var count = {};
-        plan.forEach(function (g) { count[g] = (count[g] || 0) + 1; });
-        var summary = GRADES.filter(function (g) { return count[g]; })
-                            .map(function (g) { return g + " " + count[g] + "개"; }).join(" · ");
-        return '<div class="needblock"><div class="nh"><b>' + r.sem.label + '</b>' +
-               '<em>' + r.subjects.length + '과목 · ' + summary + '</em></div>' +
-               '<div class="plan">' + rows + '</div></div>';
-      }).join("");
-    }
-
-    // 시나리오
-    byId("scen").innerHTML = (agg.C <= 0 || TW === 0)
-      ? '<tr><td colspan="4" style="text-align:left;color:var(--ink-3);font-family:inherit">남은 과목이 없습니다.</td></tr>'
-      : SCENARIOS.map(function (row) {
-          var m = agg.finalM(row[1]), p = percentileOf(m);
-          return '<tr class="' + (p <= state.target ? "hit" : "") + '">' +
-                 '<td>' + row[0] + '</td><td>' + fmt(m, 2) + '</td>' +
-                 '<td>' + fmt(scoreOf(m), 1) + '</td><td>' + fmt(p, 1) + '%</td></tr>';
-        }).join("");
-
-    byId("formulaBox").textContent = formulaText();
-  }
-
-  function renderAll() { renderSems(); renderResults(); }
-
-  /* ======================================================================
-     7. 목표 입력
-     ====================================================================== */
-  var tNum = byId("targetNum"), tRange = byId("targetRange");
-  function applyTarget(v, syncRange) {
-    if (isNaN(v)) return;
-    state.target = Math.max(0.1, Math.min(99, v));
-    if (syncRange) tRange.value = Math.max(1, Math.min(70, state.target));
-    else tNum.value = state.target;
-    renderSemsKeeping(null);   // 고스트 칩이 목표에 따라 바뀝니다
-    renderResults();
-  }
-  function syncTarget() {
-    tNum.value = state.target;
-    tRange.value = Math.max(1, Math.min(70, state.target));
-  }
-  tNum.addEventListener("input", function () { applyTarget(parseFloat(tNum.value), true); });
-  tRange.addEventListener("input", function () { applyTarget(parseFloat(tRange.value), false); });
-
-  /* ======================================================================
-     8. 저장 — [저장]은 항상 폴더를 고르는 창을 엽니다
-     ====================================================================== */
-  var FS_PICK = typeof window.showSaveFilePicker === "function";
-  var FS_DIR  = typeof window.showDirectoryPicker === "function";
-  var dirHandle = null;
-
-  byId(FS_DIR ? "fsRow" : "lsRow").hidden = false;
-
-  function fileName() { return safeFileName(byId("stuName").value) + "_내신역산.json"; }
-
-  function idb() {
-    return new Promise(function (res, rej) {
-      var r = indexedDB.open(IDB_NAME, 1);
-      r.onupgradeneeded = function () { r.result.createObjectStore(IDB_STORE); };
-      r.onsuccess = function () { res(r.result); };
-      r.onerror = function () { rej(r.error); };
-    });
-  }
-  function idbPut(v) {
-    return idb().then(function (db) {
-      return new Promise(function (res, rej) {
-        var t = db.transaction(IDB_STORE, "readwrite");
-        t.objectStore(IDB_STORE).put(v, IDB_KEY);
-        t.oncomplete = function () { res(); };
-        t.onerror = function () { rej(t.error); };
-      });
-    });
-  }
-  function idbGet() {
-    return idb().then(function (db) {
-      return new Promise(function (res) {
-        var t = db.transaction(IDB_STORE, "readonly");
-        var q = t.objectStore(IDB_STORE).get(IDB_KEY);
-        q.onsuccess = function () { res(q.result || null); };
-        q.onerror = function () { res(null); };
-      });
-    }).catch(function () { return null; });
-  }
-  function perm(h, ask) {
-    if (!h || !h.queryPermission) return Promise.resolve(false);
-    return h.queryPermission({ mode: "readwrite" }).then(function (p) {
-      if (p === "granted") return true;
-      if (!ask) return false;
-      return h.requestPermission({ mode: "readwrite" }).then(function (q) { return q === "granted"; });
-    }).catch(function () { return false; });
-  }
-  function writeTo(handle, text) {
-    return handle.createWritable().then(function (w) {
-      return w.write(text).then(function () { return w.close(); });
-    });
-  }
-  function showFolder() {
-    var el = byId("folderName");
-    el.textContent = dirHandle ? dirHandle.name : "미지정";
-    el.className = "folder" + (dirHandle ? " set" : "");
-    el.title = dirHandle ? "이 폴더가 학생 자료 보관함입니다" : "보관함 폴더가 지정되지 않았습니다";
-    byId("pickDir").textContent = dirHandle ? "폴더 바꾸기…" : "폴더 지정…";
-    byId("quickSave").hidden = !dirHandle;
-  }
-  function listFolder() {
-    var sel = byId("fileList");
-    if (!sel) return Promise.resolve();
-    if (!dirHandle) { sel.innerHTML = '<option value="">보관함 학생…</option>'; return Promise.resolve(); }
-    var names = [];
-    return (async function () {
-      try {
-        for await (var e of dirHandle.values()) {
-          if (e.kind === "file" && /\.json$/i.test(e.name)) names.push(e.name);
-        }
-      } catch (err) { /* 권한 없음 */ }
-      names.sort(function (a, b) { return a.localeCompare(b, "ko"); });
-      sel.innerHTML = '<option value="">보관함 학생… (' + names.length + ')</option>' +
-        names.map(function (n) {
-          return '<option value="' + esc(n) + '">' + esc(n.replace(/\.json$/i, "")) + '</option>';
-        }).join("");
-    })();
-  }
-  function download(text, name) {
-    try {
-      var blob = new Blob([text], { type: "application/json" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url; a.download = name;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
-      msg("‘" + name + "’로 내려받았습니다. 저장 위치를 매번 고르려면 브라우저 설정에서 " +
-          "‘다운로드 전에 각 파일의 저장 위치 확인’을 켜세요.");
-    } catch (e) {
-      msg("이 화면에서는 파일 저장이 막혀 있습니다. 아래 [자료 내보내기]로 복사해 두세요.");
+        els.customChange.innerHTML = cRes.diffStr;
     }
   }
 
-  // [저장] — 언제나 저장 위치(폴더)를 고르는 창
-  byId("saveFile").addEventListener("click", function () {
-    var text = serialize(), name = fileName();
-    if (!byId("stuName").value.trim()) msg("학생 이름을 넣으면 파일 이름이 학생 이름으로 만들어집니다.");
-    if (FS_PICK) {
-      var opt = { suggestedName: name,
-                  types: [{ description: "내신 상담 자료", accept: { "application/json": [".json"] } }] };
-      if (dirHandle) opt.startIn = dirHandle;
-      window.showSaveFilePicker(opt).then(function (h) {
-        return writeTo(h, text).then(function () {
-          msg("저장했습니다 — " + h.name);
-          return listFolder();
-        });
-      }).catch(function (err) {
-        if (err && err.name === "AbortError") { msg("저장을 취소했습니다."); return; }
-        download(text, name);
-      });
-    } else {
-      download(text, name);
+  // 모든 입력칸에 이벤트 리스너 부착
+  Object.values(els).forEach(el => {
+    if(el.tagName === 'INPUT') {
+      el.addEventListener('input', calculate);
     }
   });
 
-  // [보관함에 바로 저장] — 지정한 폴더에 창 없이
-  byId("quickSave").addEventListener("click", function () {
-    if (!dirHandle) return;
-    var text = serialize(), name = fileName();
-    perm(dirHandle, true).then(function (ok) {
-      if (!ok) { msg("폴더 접근 권한이 필요합니다. [폴더 바꾸기…]로 다시 연결하세요."); return; }
-      return dirHandle.getFileHandle(name, { create: true })
-        .then(function (fh) { return writeTo(fh, text); })
-        .then(function () {
-          msg("저장했습니다 — " + dirHandle.name + " ⁄ " + name);
-          return listFolder();
-        });
-    }).catch(function () { msg("저장하지 못했습니다. [저장]으로 위치를 골라 보세요."); });
-  });
-
-  byId("pickDir").addEventListener("click", function () {
-    if (!FS_DIR) { msg("이 브라우저는 폴더 지정을 지원하지 않습니다. 크롬이나 엣지에서 열어 주세요."); return; }
-    window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" }).then(function (h) {
-      dirHandle = h;
-      showFolder();
-      idbPut(h).catch(function () {});
-      msg("보관함 폴더를 ‘" + h.name + "’로 정했습니다. 이 폴더의 학생 파일이 목록에 뜹니다.");
-      return listFolder();
-    }).catch(function (err) {
-      if (err && err.name === "AbortError") return;
-      msg("폴더를 지정하지 못했습니다. 저장된 html 파일을 더블클릭해 여신 게 맞는지 확인해 주세요.");
-    });
-  });
-
-  byId("loadDir").addEventListener("click", function () {
-    var name = byId("fileList").value;
-    if (!dirHandle || !name) { msg("보관함 폴더와 학생 파일을 먼저 고르세요."); return; }
-    perm(dirHandle, true).then(function (ok) {
-      if (!ok) { msg("폴더 접근 권한이 필요합니다."); return; }
-      return dirHandle.getFileHandle(name)
-        .then(function (fh) { return fh.getFile(); })
-        .then(function (f) { return f.text(); })
-        .then(applyJSON);
-    }).catch(function () { msg("파일을 열지 못했습니다."); });
-  });
-
-  byId("delDir").addEventListener("click", function () {
-    var name = byId("fileList").value;
-    if (!dirHandle || !name) { msg("지울 학생 파일을 먼저 고르세요."); return; }
-    perm(dirHandle, true).then(function (ok) {
-      if (!ok) return;
-      return dirHandle.removeEntry(name).then(function () {
-        msg("‘" + name + "’을 보관함에서 지웠습니다.");
-        return listFolder();
-      });
-    }).catch(function () { msg("삭제하지 못했습니다."); });
-  });
-
-  byId("openFile").addEventListener("click", function () { byId("filePick").click(); });
-  byId("filePick").addEventListener("change", function (e) {
-    var f = e.target.files && e.target.files[0];
-    e.target.value = "";
-    if (!f) return;
-    var r = new FileReader();
-    r.onload = function () { applyJSON(String(r.result)); };
-    r.onerror = function () { msg("파일을 읽지 못했습니다."); };
-    r.readAsText(f, "utf-8");
-  });
-
-  /* ---------- 브라우저 임시 저장 (사파리·파이어폭스) ---------- */
-  function lsAll() {
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch (e) { return {}; }
-  }
-  function refreshLsList(sel) {
-    var el = byId("stuList"), names = Object.keys(lsAll()).sort(function (a, b) {
-      return a.localeCompare(b, "ko");
-    });
-    el.innerHTML = '<option value="">목록…</option>' +
-      names.map(function (n) { return '<option value="' + esc(n) + '">' + esc(n) + '</option>'; }).join("");
-    if (sel && names.indexOf(sel) >= 0) el.value = sel;
-  }
-  byId("lsSaveBtn").addEventListener("click", function () {
-    var name = byId("stuName").value.trim();
-    if (!name) { byId("stuName").focus(); msg("학생 이름을 입력한 뒤 저장하세요."); return; }
-    try {
-      var db = lsAll(); db[name] = serialize();
-      localStorage.setItem(LS_KEY, JSON.stringify(db));
-      refreshLsList(name); msg("‘" + name + "’ 저장했습니다.");
-    } catch (e) { msg("이 브라우저에서는 저장 공간을 쓸 수 없습니다. 인쇄로 보관하세요."); }
-  });
-  byId("lsLoadBtn").addEventListener("click", function () {
-    var name = byId("stuList").value; if (!name) { msg("불러올 학생을 고르세요."); return; }
-    var t = lsAll()[name]; if (t) applyJSON(t);
-  });
-  byId("lsDelBtn").addEventListener("click", function () {
-    var name = byId("stuList").value; if (!name) { msg("지울 학생을 고르세요."); return; }
-    try {
-      var db = lsAll(); delete db[name];
-      localStorage.setItem(LS_KEY, JSON.stringify(db));
-      refreshLsList(); msg("‘" + name + "’ 삭제했습니다.");
-    } catch (e) { /* noop */ }
-  });
-
-  /* ---------- 복사·붙여넣기 ---------- */
-  var rawBox = byId("rawBox");
-  byId("rawDump").addEventListener("click", function () { rawBox.value = serialize(); rawBox.focus(); });
-  byId("rawCopy").addEventListener("click", function () {
-    if (!rawBox.value) rawBox.value = serialize();
-    rawBox.select();
-    var ok = false;
-    try { ok = document.execCommand("copy"); } catch (e) {}
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(rawBox.value).then(
-        function () { msg("자료를 복사했습니다."); },
-        function () { msg(ok ? "자료를 복사했습니다." : "복사가 막혀 있습니다. 직접 선택해 복사하세요."); }
-      );
-    } else {
-      msg(ok ? "자료를 복사했습니다." : "직접 선택해 복사하세요.");
-    }
-  });
-  byId("rawApply").addEventListener("click", function () { applyJSON(rawBox.value); });
-
-  /* ---------- 새 학생 ---------- */
-  byId("reset").addEventListener("click", function () {
-    state = freshState();
-    byId("stuName").value = "";
-    syncTarget();
-    renderAll();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    msg("새 학생으로 시작합니다.");
-  });
-
-  /* ---------- 인쇄 ---------- */
-  function fillPrintHead() {
-    var agg = aggregate(), M = agg.nowM, d = new Date();
-    var name = byId("stuName").value.trim();
-    byId("printhead").innerHTML =
-      "<b>" + (name ? esc(name) + " 내신 상담 기록" : "내신 상담 기록") + "</b>" +
-      "<span>출력일 " + d.getFullYear() + ". " + (d.getMonth() + 1) + ". " + d.getDate() + ".</span>" +
-      "<span>석차백분율(추정) " + (M === null ? "–" : fmt(percentileOf(M), 1) + "%") + "</span>" +
-      "<span>교과성적 " + (M === null ? "–" : fmt(scoreOf(M), 1)) + " / 240</span>" +
-      "<span>목표 " + fmt(state.target, 1) + "% 안에 들기</span>" +
-      "<span>확정 배점 " + (agg.TW > 0 ? (agg.GW / agg.TW * 100).toFixed(0) : 0) + "%</span>";
-  }
-  window.addEventListener("beforeprint", fillPrintHead);
-  byId("print").addEventListener("click", function () {
-    fillPrintHead();
-    msg("인쇄 창에서 대상을 ‘PDF로 저장’으로 고르면 PDF로 보관할 수 있습니다.");
-    setTimeout(function () { window.print(); }, 60);
-  });
-
-  /* ======================================================================
-     9. 시작
-     ====================================================================== */
-  syncTarget();
-  renderAll();
-  try { refreshLsList(); } catch (e) {}
-  if (FS_DIR) {
-    showFolder();
-    idbGet().then(function (h) {
-      if (!h) return;
-      dirHandle = h;
-      showFolder();
-      return perm(h, false).then(function (ok) {
-        if (ok) return listFolder();
-        byId("folderName").title = "권한이 풀렸습니다 — [폴더 바꾸기…]로 다시 연결하세요";
-      });
-    }).catch(function () {});
-  }
+  // 초기 렌더링
+  calculate();
 })();
 </script>
 </body>
