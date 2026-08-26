@@ -45,7 +45,7 @@ h1 em{font-style:normal;color:var(--pink)}
 /* ---------- 레이아웃 ---------- */
 .grid{display:grid;grid-template-columns:1fr;gap:24px}
 @media (min-width:900px){ .grid{grid-template-columns:352px 1fr;align-items:start} }
-@media (max-width:980px){ .lede{white-space:normal;font-size:13px} }
+@media (max-width:620px){ .lede{font-size:13px} }
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
   box-shadow:var(--shadow);overflow:hidden}
@@ -65,6 +65,8 @@ input[type="number"]{font-family:"IBM Plex Mono",monospace;font-size:16px;font-w
   width:92px;padding:8px 12px;border:1px solid var(--line-2);border-radius:9px;color:var(--ink);background:var(--surface)}
 .input-row.minor input[type="number"]{width:74px;font-size:14px;padding:6px 10px}
 input[type="number"]:focus{outline:2px solid var(--pink);border-color:transparent}
+input[type="number"][readonly]{background:var(--surface-2);color:var(--ink-2);cursor:default}
+input[type="number"][readonly]:focus{outline:none;border-color:var(--line-2)}
 select{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line-2);border-radius:9px;
   background:var(--surface);color:var(--ink);max-width:100%}
 select:focus{outline:2px solid var(--pink);border-color:transparent}
@@ -134,9 +136,9 @@ details.box[open]>summary::before{content:"－ "}
 
 <div class="app">
   <header class="masthead">
-     <p class="eyebrow">진로진학 상담용 내신 산출기</p>
+    <p class="eyebrow">진로진학 상담용 내신 산출기</p>
     <h1><em>중3 최종 석차</em> 예측 프로그램</h1>
-    <p class="lede">누적 석차를 환산점수로 되돌려 남은 학기 성취도에 따른 최종 석차를 예측합니다.<br>
+    <p class="lede">누적 석차를 환산점수로 되돌려 남은 학기 성취도에 따른 최종 석차를 예측합니다.
       백분율은 비례식이 아니라 분석에 활용된 대구시교육청 소속 중학교 <b>5개 학기 실제 성취도 분포</b> 곡선으로 환산합니다.</p>
   </header>
 
@@ -164,7 +166,6 @@ details.box[open]>summary::before{content:"－ "}
           <div class="field" style="margin-top:6px">
             <span>어디까지 성적이 나왔나요?</span>
             <select id="stage">
-              <option value="s11">1학년 1학기까지</option>
               <option value="s21">2학년 1학기까지</option>
               <option value="s22">2학년 2학기까지</option>
               <option value="s31" selected>3학년 1학기까지</option>
@@ -174,7 +175,7 @@ details.box[open]>summary::before{content:"－ "}
           <div class="input-row minor">
             <label for="weightCompleted">누적 학기 반영비율</label>
             <div class="input-wrap">
-              <input type="number" id="weightCompleted" value="72.2" min="5" max="95" step="0.1">
+              <input type="number" id="weightCompleted" value="75" min="5" max="95" step="0.1" readonly>
               <span class="unit">%</span>
             </div>
           </div>
@@ -197,7 +198,7 @@ details.box[open]>summary::before{content:"－ "}
             <span class="stat-value" id="outCurAvg">4.31 / 5.0</span>
           </div>
           <div class="stat-box">
-            <span class="stat-label">해당학교 중앙값(상위 50%)</span>
+            <span class="stat-label">본교 중앙값(상위 50%)</span>
             <span class="stat-value" id="outMedian" style="font-size:18px;color:var(--ink-2)">3.52</span>
           </div>
           <div class="stat-box">
@@ -238,7 +239,7 @@ details.box[open]>summary::before{content:"－ "}
 
   <!-- 분포 곡선 -->
   <section class="card">
-    <div class="card-h">환산평균이 몇 %가 되는지 — 분석에 활용된 해당학교 실제 분포 곡선
+    <div class="card-h">환산평균이 몇 %가 되는지 — 본교 실제 분포 곡선
       <span class="sub">가로 환산평균 · 세로 석차백분율(위쪽이 상위)</span>
     </div>
     <div class="card-body">
@@ -256,21 +257,21 @@ details.box[open]>summary::before{content:"－ "}
   </section>
 
   <details class="box">
-    <summary>분석에 활용된 해당학교 실제 분포 기준표 · 산출 근거</summary>
+    <summary>본교 실제 분포 기준표 · 산출 근거</summary>
     <div class="dbody">
       <table>
         <thead><tr><th>석차백분율</th><th>실제 분포 기준 환산평균</th><th>단순 비례식이라면</th><th>차이</th></tr></thead>
         <tbody id="refTable"></tbody>
       </table>
       <p class="src" style="margin-top:18px">
-        <b>자료 출처</b> 대구광역시교육청 소속 ㅇㅇ중학교 학교알리미 「4-나. 교과별 학업성취 사항」 공시자료 — 2023년 9월(1학년 1학기),
-        2024년 9월(2학년 1·2학기), 2025년 9월(3학년 1·2학기).
+        <b>자료 출처</b> 고산중학교 학교알리미 「4-나. 교과별 학업성취 사항」 공시자료 — 2023년 9월(1학년 1학기),
+        2024년 9월(2학년 1학기), 2025년 4월(2학년 2학기), 2026년 4월(3학년 1·2학기).
         5개 학기 55개 과목의 A~E 성취도별 분포비율을 그대로 사용했습니다.<br>
         <b>반영비율</b> 1-1 10% · 1-2 자유학기(제외) · 2-1 15% · 2-2 15% · 3-1 25% · 3-2 25%, 합계 90%를 100%로 환산.<br>
         <b>산출 방법</b> 위 실제 분포를 그대로 따르는 가상의 학생 40만 명을 만들어(과목 간 성적 상관 0.64 가정)
         환산평균을 계산한 뒤, 그 분포에서 「환산평균 → 석차백분율」 곡선을 뽑았습니다. 프로그램은 이 곡선으로
         누적 석차를 환산평균으로 되돌리고, 최종 환산평균을 다시 백분율로 바꿉니다.<br>
-        <b>왜 달라지나</b> 분석에 활용된 중학교는 체육·음악·미술의 A 비율이 매우 높고(체육 A 47~74%) 국어·기술가정도 후한 편이라,
+        <b>왜 달라지나</b> 본교는 체육·음악·미술의 A 비율이 매우 높고(체육 A 47~74%) 국어·기술가정도 후한 편이라,
         중위권 환산평균이 단순 비례식보다 높게 형성됩니다. 그래서 같은 환산평균이라도 실제 석차백분율은
         비례식보다 뒤쪽으로 나옵니다 — 환산평균 4.00은 상위 25%가 아니라 <b>상위 약 31%</b>이고, 중앙값(상위 50%)은 3.00이 아니라 <b>3.50</b>입니다.
       </p>
@@ -330,10 +331,9 @@ details.box[open]>summary::before{content:"－ "}
      학기별 반영비율 — 1-2는 자유학기라 빠지고 90%를 100%로 환산
      ====================================================================== */
   var STAGE = {
-    s11: { w: 10 / 90 * 100, subj: 12, label: "1학년 1학기까지" },
-    s21: { w: 25 / 90 * 100, subj: 11, label: "2학년 1학기까지" },
-    s22: { w: 40 / 90 * 100, subj: 11, label: "2학년 2학기까지" },
-    s31: { w: 65 / 90 * 100, subj: 11, label: "3학년 1학기까지" }
+    s21: { w: 35, subj: 11, label: "2학년 1학기까지" },
+    s22: { w: 50, subj: 11, label: "2학년 2학기까지" },
+    s31: { w: 75, subj: 11, label: "3학년 1학기까지" }
   };
 
   var els = {
@@ -571,6 +571,12 @@ details.box[open]>summary::before{content:"－ "}
     els[k].addEventListener('input', calculate);
   });
   window.addEventListener('resize', drawChart);
+
+  // 초기 로드 시에도 선택된 학기 단계에 맞춰 반영비율을 자동으로 채움
+  (function syncWeightFromStage() {
+    var s0 = STAGE[els.stage.value];
+    if (s0) els.W.value = s0.w.toFixed(1);
+  })();
 
   calculate();
 })();
