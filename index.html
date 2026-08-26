@@ -31,7 +31,7 @@ body{
   font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
 }
-.app { max-width: 900px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 24px; }
+.app { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 24px; }
 
 /* ---------- 헤더 ---------- */
 .masthead { border-bottom: 2px solid var(--line-2); padding-bottom: 20px; }
@@ -41,7 +41,7 @@ h1 { margin: 0; font-family: "Gowun Dodum", sans-serif; font-size: 32px; font-we
 
 /* ---------- 레이아웃 ---------- */
 .grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
-@media (min-width: 768px) { .grid { grid-template-columns: 1fr 1fr; align-items: start; } }
+@media (min-width: 860px) { .grid { grid-template-columns: 340px 1fr; align-items: start; } }
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
 .card-h { background: var(--surface-2); padding: 16px 20px; border-bottom: 1px solid var(--line); font-family: "Gowun Dodum", sans-serif; font-size: 18px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
@@ -60,8 +60,9 @@ input[type="number"]:focus { outline: 2px solid var(--sky); border-color: transp
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--line-2); }
 .stat-box { display: flex; flex-direction: column; gap: 4px; }
 .stat-label { font-size: 12px; color: var(--ink-3); }
-.stat-value { font-family: "IBM Plex Mono", monospace; font-size: 24px; font-weight: 700; color: var(--ink); }
-.stat-value.highlight { color: var(--pink); }
+/* 글자 크기를 21px로 줄이고 한 줄 유지를 위해 white-space: nowrap 추가 */
+.stat-value { font-family: "IBM Plex Mono", monospace; font-size: 21px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.stat-value.highlight { color: var(--pink); font-size: 24px; }
 
 /* ---------- 시나리오 테이블 ---------- */
 table { width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: right; }
@@ -78,12 +79,15 @@ tbody tr:last-child td { border-bottom: none; }
 /* ---------- 직접 조합 ---------- */
 .custom-sim { margin-top: 20px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--line); }
 .custom-sim h3 { margin: 0 0 16px; font-size: 15px; font-weight: 600; }
-.grade-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; margin-bottom: 16px; }
+/* D/E 분리를 위해 grid 컬럼을 5개로 변경 */
+.grade-inputs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
 .grade-input { display: flex; flex-direction: column; gap: 6px; }
-.grade-input label { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 13px; text-align: center; }
-.grade-input input { width: 100%; text-align: center; }
-.custom-result { text-align: center; font-size: 15px; font-weight: 600; color: var(--ink); padding-top: 16px; border-top: 1px dashed var(--line-2); }
-.custom-result span { font-family: "IBM Plex Mono", monospace; font-size: 22px; color: var(--pink); margin: 0 4px; }
+.grade-input label { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 13px; text-align: center; white-space: nowrap; }
+.grade-input input { width: 100%; text-align: center; font-size: 15px; padding: 6px 4px; }
+.custom-result { text-align: center; font-size: 15px; font-weight: 600; color: var(--ink); padding-top: 16px; border-top: 1px dashed var(--line-2); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; min-height: 52px; }
+.custom-result span.rank-num { font-family: "IBM Plex Mono", monospace; font-size: 22px; color: var(--pink); margin: 0 2px; }
+.custom-result span.pct-num { font-family: "IBM Plex Mono", monospace; font-size: 22px; color: var(--pink); font-weight: 700; margin-left: 4px; }
+.error-msg { color: var(--danger); font-size: 14.5px; font-weight: 600; }
 
 .note { font-size: 12.5px; color: var(--ink-3); margin-top: 16px; line-height: 1.5; }
 </style>
@@ -94,7 +98,7 @@ tbody tr:last-child td { border-bottom: none; }
   <header class="masthead">
     <p class="eyebrow">진로진학 상담용 내신 산출기</p>
     <h1>중3 최종 석차 예측 프로그램</h1>
-    <p class="lede">현재까지의 등수를 기반으로 환산점수를 산출하고, 남은 학기의 성적(A~E) 조합에 따른 최종 석차 변동을 예측합니다.</p>
+    <p class="lede">현재까지의 누적 등수를 기반으로 환산점수를 산출하고, 남은 학기의 성적(A~E) 조합에 따른 최종 예상 석차와 백분율을 예측합니다.</p>
   </header>
 
   <div class="grid">
@@ -111,7 +115,7 @@ tbody tr:last-child td { border-bottom: none; }
             </div>
           </div>
           <div class="input-row">
-            <label for="currentRank">현재 석차</label>
+            <label for="currentRank">현재까지 누적 석차</label>
             <div class="input-wrap">
               <input type="number" id="currentRank" value="40" min="1">
               <span class="unit">등</span>
@@ -169,11 +173,11 @@ tbody tr:last-child td { border-bottom: none; }
             <div class="grade-input"><label>A (5점)</label><input type="number" id="gA" value="8" min="0"></div>
             <div class="grade-input"><label>B (4점)</label><input type="number" id="gB" value="0" min="0"></div>
             <div class="grade-input"><label>C (3점)</label><input type="number" id="gC" value="0" min="0"></div>
-            <div class="grade-input"><label>D/E</label><input type="number" id="gD" value="0" min="0" title="D와 E는 편의상 2점으로 합산 처리"></div>
+            <div class="grade-input"><label>D (2점)</label><input type="number" id="gD" value="0" min="0"></div>
+            <div class="grade-input"><label>E (1점)</label><input type="number" id="gE" value="0" min="0"></div>
           </div>
-          <div class="custom-result">
-            이대로 받으면 최종 <span id="customRank">30</span>등 예상 
-            <span id="customChange" style="font-size: 14px; font-weight: normal;">(▲ 10등)</span>
+          <div class="custom-result" id="customResultWrapper">
+            <!-- 상태에 따라 메시지가 변경됩니다 -->
           </div>
         </div>
         
@@ -198,13 +202,10 @@ tbody tr:last-child td { border-bottom: none; }
     gB: document.getElementById('gB'),
     gC: document.getElementById('gC'),
     gD: document.getElementById('gD'),
-    customRank: document.getElementById('customRank'),
-    customChange: document.getElementById('customChange')
+    gE: document.getElementById('gE'),
+    resultWrapper: document.getElementById('customResultWrapper')
   };
 
-  // 대구 등 일반적인 백분율 산출 공식: 백분율 = (5 - 환산평균) / 4 * 100
-  // 따라서, 환산평균 = 5 - (백분율 * 4 / 100)
-  
   function calculate() {
     let totalN = parseInt(els.N.value) || 200;
     let curR = parseInt(els.R.value) || 40;
@@ -256,25 +257,35 @@ tbody tr:last-child td { border-bottom: none; }
     let cB = parseInt(els.gB.value) || 0;
     let cC = parseInt(els.gC.value) || 0;
     let cD = parseInt(els.gD.value) || 0;
-    let sumCount = cA + cB + cC + cD;
+    let cE = parseInt(els.gE.value) || 0;
+    let sumCount = cA + cB + cC + cD + cE;
 
-    // 과목 수가 초과/부족한 경우 시각적 보정 (실제 연산에서는 입력된 총 과목수를 분모로 씀)
     let actualSubjs = sumCount > 0 ? sumCount : 1; 
-    let customRemAvg = ((cA * 5) + (cB * 4) + (cC * 3) + (cD * 2)) / actualSubjs;
+    let customRemAvg = ((cA * 5) + (cB * 4) + (cC * 3) + (cD * 2) + (cE * 1)) / actualSubjs;
     
     let cRes = getSimResult(customRemAvg);
-    els.customRank.textContent = cRes.rank;
     
-    if (sumCount !== subjs) {
-        els.customChange.innerHTML = `<span style="color:var(--warn);">(입력된 과목 합계가 ${subjs}개가 아닙니다)</span>`;
+    // 과목 수 초과 오류 검증 및 출력
+    if (sumCount > subjs) {
+        els.resultWrapper.innerHTML = `<span class="error-msg">⚠️ 오류: 입력한 과목 합계(${sumCount}개)가 남은 과목 수(${subjs}개)보다 많습니다!</span>`;
+    } else if (sumCount < subjs) {
+        els.resultWrapper.innerHTML = `
+            <span>이대로 받으면 최종</span>
+            <span class="rank-num">${cRes.rank}</span><span>등 예상</span> 
+            <span style="color:var(--warn); font-size:14px; font-weight:normal; margin-left:4px;">(입력 과목 수가 부족합니다)</span>
+        `;
     } else {
-        els.customChange.innerHTML = cRes.diffStr;
+        els.resultWrapper.innerHTML = `
+            <span>이대로 받으면 최종</span>
+            <span class="rank-num">${cRes.rank}</span><span>등 예상</span> 
+            <span class="pct-num">(${cRes.pct.toFixed(2)}%)</span>
+        `;
     }
   }
 
   // 모든 입력칸에 이벤트 리스너 부착
   Object.values(els).forEach(el => {
-    if(el.tagName === 'INPUT') {
+    if(el && el.tagName === 'INPUT') {
       el.addEventListener('input', calculate);
     }
   });
