@@ -1,4 +1,12 @@
-﻿<!doctype html>
+﻿
+index_html_코드.txt
+
+페이지
+1
+/
+1
+100%
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -16,7 +24,7 @@
   --ink:#1F2E3D; --ink-2:#55697E; --ink-3:#8598AB;
   --line:#D8E9F3; --line-2:#BEDAEA;
   --pink:#E5197F; --pink-ink:#FFFFFF; --pink-soft:#FDE6F1;
-  --sky:#2E9FD4; --sky-soft:#E1F3FC;
+  --sky:#2E9FD4; --sky-deep:#1B7FAF; --sky-soft:#E1F3FC;
   --warn:#B4722A; --warn-soft:#FBEEDA;
   --danger:#C8324F; --danger-soft:#FBE3E8;
   --shadow:0 1px 2px rgba(31,46,61,.05), 0 12px 28px -18px rgba(31,46,61,.28);
@@ -31,49 +39,101 @@ body{
   font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
 }
-.app { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 24px; }
-.masthead { border-bottom: 2px solid var(--line-2); padding-bottom: 20px; }
-.eyebrow { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--sky); }
-h1 { margin: 0; font-family: "Gowun Dodum", sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em; }
-.lede { margin: 10px 0 0; color: var(--ink-2); font-size: 14px; }
-.grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
-@media (min-width: 860px) { .grid { grid-template-columns: 340px 1fr; align-items: start; } }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
-.card-h { background: var(--surface-2); padding: 16px 20px; border-bottom: 1px solid var(--line); font-family: "Gowun Dodum", sans-serif; font-size: 18px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
-.card-body { padding: 24px 20px; }
-.input-group { display: flex; flex-direction: column; gap: 16px; }
-.input-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.input-row label { font-weight: 500; color: var(--ink); font-size: 14.5px; }
-.input-wrap { display: flex; align-items: center; gap: 8px; }
-input[type="number"] { font-family: "IBM Plex Mono", monospace; font-size: 16px; font-weight: 600; text-align: right; width: 90px; padding: 8px 12px; border: 1px solid var(--line-2); border-radius: 8px; color: var(--ink); }
-input[type="number"]:focus { outline: 2px solid var(--sky); border-color: transparent; }
-.unit { color: var(--ink-3); font-size: 14px; }
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--line-2); }
-.stat-box { display: flex; flex-direction: column; gap: 4px; }
-.stat-label { font-size: 12px; color: var(--ink-3); }
-.stat-value { font-family: "IBM Plex Mono", monospace; font-size: 21px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-.stat-value.highlight { color: var(--pink); font-size: 24px; }
-table { width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: right; }
-th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); }
-th { color: var(--ink-3); font-weight: 600; font-size: 12px; border-bottom: 2px solid var(--line-2); }
-th:first-child, td:first-child { text-align: left; }
-tbody td { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
-tbody td:first-child { font-family: "IBM Plex Sans KR", sans-serif; font-weight: 500; }
-tbody tr:last-child td { border-bottom: none; }
-.change-up { color: var(--pink); font-weight: 600; font-size: 12.5px; margin-left: 4px; }
-.change-down { color: var(--sky); font-weight: 600; font-size: 12.5px; margin-left: 4px; }
-.change-same { color: var(--ink-3); font-size: 12.5px; margin-left: 4px; }
-.custom-sim { margin-top: 20px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--line); }
-.custom-sim h3 { margin: 0 0 16px; font-size: 15px; font-weight: 600; }
-.grade-inputs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
-.grade-input { display: flex; flex-direction: column; gap: 6px; }
-.grade-input label { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 13px; text-align: center; white-space: nowrap; }
-.grade-input input { width: 100%; text-align: center; font-size: 15px; padding: 6px 4px; }
-.custom-result { text-align: center; font-size: 15px; font-weight: 600; color: var(--ink); padding-top: 16px; border-top: 1px dashed var(--line-2); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; min-height: 52px; }
-.custom-result span.rank-num { font-family: "IBM Plex Mono", monospace; font-size: 22px; color: var(--pink); margin: 0 2px; }
-.custom-result span.pct-num { font-family: "IBM Plex Mono", monospace; font-size: 22px; color: var(--pink); font-weight: 700; margin-left: 4px; }
-.error-msg { color: var(--danger); font-size: 14.5px; font-weight: 600; }
-.note { font-size: 12.5px; color: var(--ink-3); margin-top: 16px; line-height: 1.5; }
+.app{max-width:1120px;margin:0 auto;padding:40px 20px 80px;display:flex;flex-direction:column;gap:24px}
+
+/* ---------- 헤더 ---------- */
+.masthead{border-bottom:2px solid var(--line-2);padding-bottom:20px}
+.eyebrow{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--sky-deep)}
+h1{margin:0;font-family:"Gowun Dodum",sans-serif;font-size:32px;font-weight:600;letter-spacing:-.02em}
+h1 em{font-style:normal;color:var(--pink)}
+.lede{margin:10px 0 0;color:var(--ink-2);font-size:14px;max-width:70ch}
+.lede b{color:var(--pink)}
+
+/* ---------- 레이아웃 ---------- */
+.grid{display:grid;grid-template-columns:1fr;gap:24px}
+@media (min-width:900px){ .grid{grid-template-columns:352px 1fr;align-items:start} }
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.card-h{background:var(--surface-2);padding:15px 20px;border-bottom:1px solid var(--line);
+  font-family:"Gowun Dodum",sans-serif;font-size:18px;font-weight:600;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.card-h .sub{font-family:"IBM Plex Sans KR",sans-serif;font-size:12px;font-weight:400;color:var(--ink-3)}
+.card-body{padding:22px 20px}
+
+/* ---------- 입력 ---------- */
+.input-group{display:flex;flex-direction:column;gap:14px}
+.input-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.input-row label{font-weight:500;color:var(--ink);font-size:14.5px}
+.input-row.minor label{color:var(--ink-2);font-size:13px}
+.input-wrap{display:flex;align-items:center;gap:8px}
+input[type="number"]{font-family:"IBM Plex Mono",monospace;font-size:16px;font-weight:600;text-align:right;
+  width:92px;padding:8px 12px;border:1px solid var(--line-2);border-radius:9px;color:var(--ink);background:var(--surface)}
+.input-row.minor input[type="number"]{width:74px;font-size:14px;padding:6px 10px}
+input[type="number"]:focus{outline:2px solid var(--pink);border-color:transparent}
+select{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line-2);border-radius:9px;
+  background:var(--surface);color:var(--ink);max-width:100%}
+select:focus{outline:2px solid var(--pink);border-color:transparent}
+.unit{color:var(--ink-3);font-size:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>span{font-size:13px;color:var(--ink-2);font-weight:500}
+
+/* ---------- 상태 ---------- */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;padding-top:18px;
+  border-top:1px dashed var(--line-2)}
+.stat-box{display:flex;flex-direction:column;gap:3px}
+.stat-label{font-size:12px;color:var(--ink-3)}
+.stat-value{font-family:"IBM Plex Mono",monospace;font-size:21px;font-weight:700;color:var(--ink);white-space:nowrap}
+.stat-value.highlight{color:var(--pink);font-size:24px}
+
+/* ---------- 표 ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px;text-align:right}
+th,td{padding:11px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--ink-3);font-weight:600;font-size:12px;border-bottom:2px solid var(--line-2)}
+th:first-child,td:first-child{text-align:left}
+tbody td{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+tbody td:first-child{font-family:"IBM Plex Sans KR",sans-serif;font-weight:500}
+tbody tr:last-child td{border-bottom:none}
+.change-up{color:var(--pink);font-weight:600;font-size:12.5px;margin-left:4px}
+.change-down{color:var(--sky-deep);font-weight:600;font-size:12.5px;margin-left:4px}
+.change-same{color:var(--ink-3);font-size:12.5px;margin-left:4px}
+
+/* ---------- 직접 조합 ---------- */
+.custom-sim{margin-top:20px;padding:18px;background:var(--surface-2);border-radius:12px;border:1px solid var(--line)}
+.custom-sim h3{margin:0 0 14px;font-size:15px;font-weight:600}
+.grade-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:8px;margin-bottom:14px}
+.grade-input{display:flex;flex-direction:column;gap:6px}
+.grade-input label{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:13px;text-align:center;white-space:nowrap}
+.grade-input input{width:100%;text-align:center;font-size:15px;padding:6px 4px}
+.gl-A{color:var(--pink)} .gl-B{color:#C9789C} .gl-C{color:var(--sky-deep)}
+.gl-D{color:var(--ink-2)} .gl-E{color:var(--ink-3)}
+.custom-result{text-align:center;font-size:15px;font-weight:600;color:var(--ink);padding-top:14px;
+  border-top:1px dashed var(--line-2);display:flex;align-items:center;justify-content:center;gap:8px;
+  flex-wrap:wrap;min-height:52px}
+.custom-result .rank-num{font-family:"IBM Plex Mono",monospace;font-size:22px;color:var(--pink);margin:0 2px}
+.custom-result .pct-num{font-family:"IBM Plex Mono",monospace;font-size:22px;color:var(--pink);font-weight:700;margin-left:4px}
+.error-msg{color:var(--danger);font-size:14.5px;font-weight:600}
+
+/* ---------- 분포 그래프 ---------- */
+.chartwrap{position:relative;padding:6px 4px 0}
+svg.chart{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;
+  padding:5px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-130%);opacity:0;
+  transition:opacity .12s;font-family:"IBM Plex Mono",monospace}
+.tip.on{opacity:1}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin-top:10px;padding-left:4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+details.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+details.box>summary{cursor:pointer;padding:14px 20px;font-weight:600;font-size:14px;list-style:none}
+details.box>summary::-webkit-details-marker{display:none}
+details.box>summary::before{content:"＋ ";color:var(--pink);font-weight:700}
+details.box[open]>summary::before{content:"－ "}
+.dbody{padding:16px 20px 20px;border-top:1px solid var(--line)}
+.note{font-size:12.5px;color:var(--ink-3);margin-top:16px;line-height:1.7}
+.note b{color:var(--ink-2)}
+.src{font-size:12px;color:var(--ink-3);line-height:1.75}
+.src b{color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -81,11 +141,13 @@ tbody tr:last-child td { border-bottom: none; }
 <div class="app">
   <header class="masthead">
     <p class="eyebrow">진로진학 상담용 내신 산출기</p>
-    <h1>중3 최종 석차 예측 프로그램</h1>
-    <p class="lede">과거 3개년 성취도 분포 데이터를 기반으로 설계된 표준 누적 분포 곡선을 적용하여, 남은 학기 성적 조합에 따른 현실적인 석차와 백분율을 예측합니다.</p>
+    <h1><em>중3 최종 석차</em> 예측 프로그램</h1>
+    <p class="lede">현재까지의 누적 석차를 환산점수로 되돌리고, 남은 학기 성취도(A~E) 조합에 따른 최종 예상 석차와 백분율을 예측합니다.
+      백분율은 단순 비례식이 아니라 <b>본교 3개 학년의 실제 성취도 분포</b>에서 뽑은 곡선으로 환산합니다.</p>
   </header>
 
   <div class="grid">
+    <!-- 왼쪽: 입력 -->
     <section class="card">
       <div class="card-h">현재 성적 현황 입력</div>
       <div class="card-body">
@@ -93,7 +155,7 @@ tbody tr:last-child td { border-bottom: none; }
           <div class="input-row">
             <label for="totalStudents">3학년 전체 인원</label>
             <div class="input-wrap">
-              <input type="number" id="totalStudents" value="197" min="10">
+              <input type="number" id="totalStudents" value="200" min="10" max="2000">
               <span class="unit">명</span>
             </div>
           </div>
@@ -104,17 +166,28 @@ tbody tr:last-child td { border-bottom: none; }
               <span class="unit">등</span>
             </div>
           </div>
-          <div class="input-row" style="margin-top: 12px;">
-            <label for="weightCompleted" style="color:var(--ink-2); font-size:13px;">누적 학기 반영비율</label>
+
+          <div class="field" style="margin-top:6px">
+            <span>어디까지 성적이 나왔나요?</span>
+            <select id="stage">
+              <option value="s11">1학년 1학기까지</option>
+              <option value="s21">2학년 1학기까지</option>
+              <option value="s22">2학년 2학기까지</option>
+              <option value="s31" selected>3학년 1학기까지</option>
+            </select>
+          </div>
+
+          <div class="input-row minor">
+            <label for="weightCompleted">누적 학기 반영비율</label>
             <div class="input-wrap">
-              <input type="number" id="weightCompleted" value="75" min="10" max="90" style="width: 70px; font-size: 14px; padding: 6px;">
+              <input type="number" id="weightCompleted" value="72.2" min="5" max="95" step="0.1">
               <span class="unit">%</span>
             </div>
           </div>
-          <div class="input-row">
-            <label for="subjCount" style="color:var(--ink-2); font-size:13px;">남은 학기 과목 수</label>
+          <div class="input-row minor">
+            <label for="subjCount">남은 학기 과목 수</label>
             <div class="input-wrap">
-              <input type="number" id="subjCount" value="8" min="1" max="15" style="width: 70px; font-size: 14px; padding: 6px;">
+              <input type="number" id="subjCount" value="11" min="1" max="20">
               <span class="unit">과목</span>
             </div>
           </div>
@@ -127,167 +200,387 @@ tbody tr:last-child td { border-bottom: none; }
           </div>
           <div class="stat-box">
             <span class="stat-label">현재 누적 환산평균</span>
-            <span class="stat-value" id="outCurAvg">4.20 / 5.0</span>
+            <span class="stat-value" id="outCurAvg">4.31 / 5.0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">본교 중앙값(상위 50%)</span>
+            <span class="stat-value" id="outMedian" style="font-size:18px;color:var(--ink-2)">3.52</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">단순 비례식이라면</span>
+            <span class="stat-value" id="outLinear" style="font-size:18px;color:var(--ink-3)">4.20</span>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- 오른쪽: 예상 -->
     <section class="card">
-      <div class="card-h">남은 학기 성적에 따른 최종 예상</div>
-      <div class="card-body" style="padding-top: 12px;">
+      <div class="card-h">남은 학기 성적에 따른 최종 예상
+        <span class="sub" id="remLabel">남은 반영비율 27.8%</span>
+      </div>
+      <div class="card-body" style="padding-top:12px">
         <table>
           <thead>
-            <tr>
-              <th>남은 학기 성취도</th>
-              <th>예상 백분율</th>
-              <th>최종 예상 석차</th>
-            </tr>
+            <tr><th>남은 학기 성취도</th><th>예상 백분율</th><th>최종 예상 석차</th></tr>
           </thead>
           <tbody id="scenarioTable"></tbody>
         </table>
 
         <div class="custom-sim">
-          <h3>직접 과목 조합해보기 (총 <span id="customTotal">8</span>과목)</h3>
+          <h3>직접 과목 조합해보기 (총 <span id="customTotal">11</span>과목)</h3>
           <div class="grade-inputs">
-            <div class="grade-input"><label>A (5점)</label><input type="number" id="gA" value="8" min="0"></div>
-            <div class="grade-input"><label>B (4점)</label><input type="number" id="gB" value="0" min="0"></div>
-            <div class="grade-input"><label>C (3점)</label><input type="number" id="gC" value="0" min="0"></div>
-            <div class="grade-input"><label>D (2점)</label><input type="number" id="gD" value="0" min="0"></div>
-            <div class="grade-input"><label>E (1점)</label><input type="number" id="gE" value="0" min="0"></div>
+            <div class="grade-input"><label class="gl-A">A (5점)</label><input type="number" id="gA" value="11" min="0" max="20"></div>
+            <div class="grade-input"><label class="gl-B">B (4점)</label><input type="number" id="gB" value="0" min="0" max="20"></div>
+            <div class="grade-input"><label class="gl-C">C (3점)</label><input type="number" id="gC" value="0" min="0" max="20"></div>
+            <div class="grade-input"><label class="gl-D">D (2점)</label><input type="number" id="gD" value="0" min="0" max="20"></div>
+            <div class="grade-input"><label class="gl-E">E (1점)</label><input type="number" id="gE" value="0" min="0" max="20"></div>
           </div>
           <div class="custom-result" id="customResultWrapper"></div>
         </div>
-        
-        <p class="note">※ 본 산출기는 3개년 성취도 자료를 기반으로 한 '경험적 누적 분포 곡선(비선형)'을 적용하여 정확도를 높였습니다. 단, 실제 시험 난이도 및 타 학생들의 성취 수준 변화에 따라 편차가 발생할 수 있습니다.</p>
       </div>
     </section>
   </div>
+
+  <!-- 분포 곡선 -->
+  <section class="card">
+    <div class="card-h">환산평균이 몇 %가 되는지 — 본교 실제 분포 곡선
+      <span class="sub">가로 환산평균 · 세로 석차백분율(위쪽이 상위)</span>
+    </div>
+    <div class="card-body">
+      <div class="chartwrap" id="chartwrap">
+        <svg class="chart" id="chart" viewBox="0 0 720 300" role="img"
+             aria-label="환산평균에 따른 석차백분율 곡선. 현재 위치와 예상 위치가 표시됩니다."></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--pink)"></i>현재 위치</span>
+        <span><i style="background:var(--sky-deep)"></i>직접 조합했을 때 예상 위치</span>
+        <span><i style="background:#B9CBD8"></i>단순 비례식(참고)</span>
+      </div>
+    </div>
+  </section>
+
+  <details class="box">
+    <summary>본교 실제 분포 기준표 · 산출 근거</summary>
+    <div class="dbody">
+      <table>
+        <thead><tr><th>석차백분율</th><th>실제 분포 기준 환산평균</th><th>단순 비례식이라면</th><th>차이</th></tr></thead>
+        <tbody id="refTable"></tbody>
+      </table>
+      <p class="src" style="margin-top:18px">
+        <b>자료 출처</b> 고산중학교 학교알리미 「4-나. 교과별 학업성취 사항」 공시자료 — 2023년 9월(1학년 1학기),
+        2024년 9월(2학년 1학기), 2025년 4월(2학년 2학기), 2026년 4월(3학년 1·2학기).
+        5개 학기 55개 과목의 A~E 성취도별 분포비율을 그대로 사용했습니다.<br>
+        <b>반영비율</b> 1-1 10% · 1-2 자유학기(제외) · 2-1 15% · 2-2 15% · 3-1 25% · 3-2 25%, 합계 90%를 100%로 환산.<br>
+        <b>산출 방법</b> 위 실제 분포를 그대로 따르는 가상의 학생 40만 명을 만들어(과목 간 성적 상관 0.64 가정)
+        환산평균을 계산한 뒤, 그 분포에서 「환산평균 → 석차백분율」 곡선을 뽑았습니다. 프로그램은 이 곡선으로
+        누적 석차를 환산평균으로 되돌리고, 최종 환산평균을 다시 백분율로 바꿉니다.<br>
+        <b>왜 달라지나</b> 본교는 체육·음악·미술의 A 비율이 매우 높고(체육 A 47~74%) 국어·기술가정도 후한 편이라,
+        중위권 환산평균이 단순 비례식보다 높게 형성됩니다. 그래서 같은 환산평균이라도 실제 석차백분율은
+        비례식보다 뒤쪽으로 나옵니다 — 환산평균 4.00은 상위 25%가 아니라 <b>상위 약 31%</b>이고, 중앙값(상위 50%)은 3.00이 아니라 <b>3.50</b>입니다.
+      </p>
+      <p class="note">
+        ※ 성취평가제 성취도에는 석차 정보가 없어, 위 곡선은 학교 공시 분포에서 추정한 값입니다.
+        동점자 처리 규정·과목 편성 차이·학년별 분포 변동에 따라 실제 학교 발급 성적표와 오차가 생길 수 있습니다.
+        진학 상담 참고용으로만 활용하시고, 확정 수치는 학교 발급 자료로 확인하세요.
+      </p>
+    </div>
+  </details>
 </div>
 
 <script>
-(function() {
-  const els = {
-    N: document.getElementById('totalStudents'),
-    R: document.getElementById('currentRank'),
-    W: document.getElementById('weightCompleted'),
-    S: document.getElementById('subjCount'),
-    outCurPct: document.getElementById('outCurPercentile'),
-    outCurAvg: document.getElementById('outCurAvg'),
-    scenTable: document.getElementById('scenarioTable'),
-    customTotal: document.getElementById('customTotal'),
-    gA: document.getElementById('gA'),
-    gB: document.getElementById('gB'),
-    gC: document.getElementById('gC'),
-    gD: document.getElementById('gD'),
-    gE: document.getElementById('gE'),
-    resultWrapper: document.getElementById('customResultWrapper')
+(function () {
+  "use strict";
+
+  /* ======================================================================
+     본교 실제 성취도 분포에서 뽑은 「환산평균 → 석차백분율」 곡선
+     M = 1.00 부터 5.00 까지 0.05 간격, 값은 상위 %
+     ====================================================================== */
+  var M0 = 1.00, MSTEP = 0.05;
+  var PCT = [100.00,100.00,100.00,100.00,100.00,100.00,100.00,100.00,100.00,100.00,100.00,100.00,
+             99.86,99.60,99.24,98.74,98.20,97.55,96.80,95.98,95.18,94.25,93.25,92.16,91.07,89.89,
+             88.66,87.38,86.07,84.74,83.49,82.06,80.60,79.11,77.58,76.00,74.41,72.77,71.13,69.44,
+             67.90,66.17,64.42,62.66,60.84,59.06,57.26,55.48,53.65,51.80,50.15,48.30,46.39,44.46,
+             42.56,40.68,38.75,36.81,34.90,33.00,31.26,29.39,27.51,25.64,23.78,21.95,20.14,18.36,
+             16.56,14.85,13.30,11.65,10.01,8.46,6.98,5.53,4.20,2.94,1.84,0.84,0.22];
+  var MMAX = M0 + MSTEP * (PCT.length - 1);          // 5.00
+  var PCT_MIN = PCT[PCT.length - 1], PCT_MAX = PCT[0];
+
+  /** 환산평균 → 석차백분율(상위 %) */
+  function percentileOf(m) {
+    if (m >= MMAX) return PCT_MIN;
+    if (m <= M0) return PCT_MAX;
+    var t = (m - M0) / MSTEP, i = Math.floor(t), f = t - i;
+    return PCT[i] + (PCT[i + 1] - PCT[i]) * f;
+  }
+  /** 석차백분율 → 환산평균 (percentileOf의 역함수) */
+  function mAtPercentile(p) {
+    p = Math.max(PCT_MIN, Math.min(PCT_MAX, p));
+    for (var i = 0; i < PCT.length - 1; i++) {
+      var a = PCT[i], b = PCT[i + 1];            // a >= b (단조 감소)
+      if (p <= a && p >= b) {
+        var f = (a === b) ? 0 : (a - p) / (a - b);
+        return M0 + MSTEP * (i + f);
+      }
+    }
+    return MMAX;
+  }
+  var MEDIAN = mAtPercentile(50);
+
+  /* 단순 비례식(옛 방식) — 비교용으로만 남겨 둡니다 */
+  function linearPct(m) { return (5 - m) / 4 * 100; }
+  function linearM(p)  { return 5 - p * 4 / 100; }
+
+  /* ======================================================================
+     학기별 반영비율 — 1-2는 자유학기라 빠지고 90%를 100%로 환산
+     ====================================================================== */
+  var STAGE = {
+    s11: { w: 10 / 90 * 100, subj: 12, label: "1학년 1학기까지" },
+    s21: { w: 25 / 90 * 100, subj: 11, label: "2학년 1학기까지" },
+    s22: { w: 40 / 90 * 100, subj: 11, label: "2학년 2학기까지" },
+    s31: { w: 65 / 90 * 100, subj: 11, label: "3학년 1학기까지" }
   };
 
-  // 경험적 누적 분포 데이터 (A~E 비율 기반 비선형 매핑)
-  const distCurve = [
-    { avg: 5.0, pct: 4.0 },   // 전과목 A는 상위 4% 내외
-    { avg: 4.5, pct: 18.0 },
-    { avg: 4.0, pct: 38.0 },  // 전과목 B는 상위 38% 내외
-    { avg: 3.5, pct: 55.0 },
-    { avg: 3.0, pct: 70.0 },  // 전과목 C는 상위 70% 내외
-    { avg: 2.5, pct: 83.0 },
-    { avg: 2.0, pct: 92.0 },
-    { avg: 1.5, pct: 97.0 },
-    { avg: 1.0, pct: 100.0 }
-  ];
+  var els = {
+    N: byId("totalStudents"), R: byId("currentRank"), W: byId("weightCompleted"),
+    S: byId("subjCount"), stage: byId("stage"),
+    curPct: byId("outCurPercentile"), curAvg: byId("outCurAvg"),
+    median: byId("outMedian"), linear: byId("outLinear"),
+    remLabel: byId("remLabel"), scen: byId("scenarioTable"),
+    customTotal: byId("customTotal"), result: byId("customResultWrapper"),
+    gA: byId("gA"), gB: byId("gB"), gC: byId("gC"), gD: byId("gD"), gE: byId("gE"),
+    chart: byId("chart"), tip: byId("tip"), chartwrap: byId("chartwrap"),
+    refTable: byId("refTable")
+  };
+  function byId(id) { return document.getElementById(id); }
+  function num(el, d) { var v = parseFloat(el.value); return isNaN(v) ? d : v; }
 
-  // 보간법 함수 (백분율 -> 환산평균)
-  function getAvgFromPct(pct) {
-    if (pct <= distCurve[0].pct) return distCurve[0].avg;
-    if (pct >= distCurve[distCurve.length-1].pct) return distCurve[distCurve.length-1].avg;
-    for (let i = 0; i < distCurve.length - 1; i++) {
-      if (pct >= distCurve[i].pct && pct <= distCurve[i+1].pct) {
-        let ratio = (pct - distCurve[i].pct) / (distCurve[i+1].pct - distCurve[i].pct);
-        return distCurve[i].avg - ratio * (distCurve[i].avg - distCurve[i+1].avg);
-      }
-    }
-    return 1.0;
-  }
+  var last = { cur: null, sim: null };
 
-  // 보간법 함수 (환산평균 -> 백분율)
-  function getPctFromAvg(avg) {
-    if (avg >= distCurve[0].avg) return distCurve[0].pct;
-    if (avg <= distCurve[distCurve.length-1].avg) return distCurve[distCurve.length-1].pct;
-    for (let i = 0; i < distCurve.length - 1; i++) {
-      if (avg <= distCurve[i].avg && avg >= distCurve[i+1].avg) {
-        let ratio = (distCurve[i].avg - avg) / (distCurve[i].avg - distCurve[i+1].avg);
-        return distCurve[i].pct + ratio * (distCurve[i+1].pct - distCurve[i].pct);
-      }
-    }
-    return 100.0;
-  }
-
+  /* ======================================================================
+     계산
+     ====================================================================== */
   function calculate() {
-    let totalN = parseInt(els.N.value) || 200;
-    let curR = parseInt(els.R.value) || 40;
-    let weightCur = (parseFloat(els.W.value) || 75) / 100;
-    let weightRem = 1.0 - weightCur;
-    let subjs = parseInt(els.S.value) || 8;
+    var totalN = Math.max(1, Math.round(num(els.N, 200)));
+    var curR   = Math.max(1, Math.round(num(els.R, 40)));
+    var wCur   = Math.min(95, Math.max(5, num(els.W, 72.2))) / 100;
+    var wRem   = 1 - wCur;
+    var subjs  = Math.max(1, Math.round(num(els.S, 11)));
 
-    let curPct = (curR / totalN) * 100;
-    // 비선형 곡선을 이용해 현재 환산평균 도출
-    let curAvg = getAvgFromPct(curPct);
+    // 누적 석차 → 백분율 → (실제 분포 곡선으로) 환산평균 되돌리기
+    var curPct = Math.min(100, curR / totalN * 100);
+    var curAvg = mAtPercentile(curPct);
 
-    els.outCurPct.textContent = curPct.toFixed(2) + '%';
-    els.outCurAvg.textContent = curAvg.toFixed(2) + ' / 5.0';
+    els.curPct.textContent = curPct.toFixed(2) + "%";
+    els.curAvg.textContent = curAvg.toFixed(2) + " / 5.0";
+    els.median.textContent = MEDIAN.toFixed(2);
+    els.linear.textContent = linearM(curPct).toFixed(2);
+    els.remLabel.textContent = "남은 반영비율 " + (wRem * 100).toFixed(1) + "%";
     els.customTotal.textContent = subjs;
 
-    const getSimResult = (remAvg) => {
-      let finalAvg = (curAvg * weightCur) + (remAvg * weightRem);
-      // 비선형 곡선을 이용해 최종 백분율 도출
-      let finalPct = getPctFromAvg(finalAvg);
-      let finalRank = Math.max(1, Math.round((finalPct / 100) * totalN));
-      let diff = curR - finalRank;
-      
-      let diffStr = diff > 0 ? `<span class="change-up">▲ ${diff}등</span>` : 
-                    diff < 0 ? `<span class="change-down">▼ ${Math.abs(diff)}등</span>` : 
-                    `<span class="change-same">- 유지</span>`;
-                    
-      return { avg: finalAvg, pct: finalPct, rank: finalRank, diffStr: diffStr };
-    };
+    function project(remAvg) {
+      var finalAvg = curAvg * wCur + remAvg * wRem;
+      var finalPct = percentileOf(finalAvg);
+      var finalRank = Math.max(1, Math.round(finalPct / 100 * totalN));
+      var diff = curR - finalRank;
+      var chip = diff > 0 ? '<span class="change-up">▲ ' + diff + '등</span>'
+               : diff < 0 ? '<span class="change-down">▼ ' + Math.abs(diff) + '등</span>'
+               : '<span class="change-same">- 유지</span>';
+      return { avg: finalAvg, pct: finalPct, rank: finalRank, chip: chip };
+    }
 
-    const scenarios = [
+    // 고정 시나리오
+    var scenarios = [
       { label: "전과목 A", avg: 5.0 },
       { label: "A 절반, B 절반", avg: 4.5 },
       { label: "전과목 B", avg: 4.0 },
+      { label: "B 절반, C 절반", avg: 3.5 },
       { label: "전과목 C", avg: 3.0 }
     ];
+    els.scen.innerHTML = scenarios.map(function (s) {
+      var r = project(s.avg);
+      return '<tr><td>' + s.label +
+             ' <span style="color:var(--ink-3);font-size:11px">(' + s.avg.toFixed(1) + '점)</span></td>' +
+             '<td>' + r.pct.toFixed(2) + '%</td>' +
+             '<td>' + r.rank + '등 ' + r.chip + '</td></tr>';
+    }).join("");
 
-    els.scenTable.innerHTML = scenarios.map(s => {
-      let res = getSimResult(s.avg);
-      return `<tr>
-                <td>${s.label} <span style="color:#8598AB; font-size:11px;">(${s.avg}점)</span></td>
-                <td>${res.pct.toFixed(2)}%</td>
-                <td>${res.rank}등 ${res.diffStr}</td>
-              </tr>`;
-    }).join('');
+    // 직접 조합
+    var cA = Math.max(0, Math.round(num(els.gA, 0))), cB = Math.max(0, Math.round(num(els.gB, 0)));
+    var cC = Math.max(0, Math.round(num(els.gC, 0))), cD = Math.max(0, Math.round(num(els.gD, 0)));
+    var cE = Math.max(0, Math.round(num(els.gE, 0)));
+    var sum = cA + cB + cC + cD + cE;
+    var remAvg = sum > 0 ? (cA * 5 + cB * 4 + cC * 3 + cD * 2 + cE) / sum : 5;
+    var sim = project(remAvg);
 
-    let cA = parseInt(els.gA.value) || 0, cB = parseInt(els.gB.value) || 0, cC = parseInt(els.gC.value) || 0;
-    let cD = parseInt(els.gD.value) || 0, cE = parseInt(els.gE.value) || 0;
-    let sumCount = cA + cB + cC + cD + cE;
-    let actualSubjs = sumCount > 0 ? sumCount : 1; 
-    let customRemAvg = ((cA * 5) + (cB * 4) + (cC * 3) + (cD * 2) + (cE * 1)) / actualSubjs;
-    
-    let cRes = getSimResult(customRemAvg);
-    
-    if (sumCount > subjs) {
-        els.resultWrapper.innerHTML = `<span class="error-msg">⚠️ 오류: 입력한 과목 합계(${sumCount}개)가 남은 과목 수(${subjs}개)보다 많습니다!</span>`;
-    } else if (sumCount < subjs) {
-        els.resultWrapper.innerHTML = `<span>이대로 받으면 최종</span> <span class="rank-num">${cRes.rank}</span><span>등 예상</span> <span style="color:var(--warn); font-size:14px; font-weight:normal; margin-left:4px;">(입력 과목 수가 부족합니다)</span>`;
+    if (sum > subjs) {
+      els.result.innerHTML = '<span class="error-msg">⚠ 입력한 과목 합계 ' + sum +
+        '개가 남은 과목 수 ' + subjs + '개보다 많습니다</span>';
+    } else if (sum === 0) {
+      els.result.innerHTML = '<span style="color:var(--ink-3);font-weight:400">' +
+        '남은 ' + subjs + '과목을 A~E에 나눠 넣어 보세요</span>';
+    } else if (sum < subjs) {
+      els.result.innerHTML =
+        '<span>이대로면 최종</span><span class="rank-num">' + sim.rank + '</span><span>등 예상</span>' +
+        '<span class="pct-num">(' + sim.pct.toFixed(2) + '%)</span>' +
+        '<span style="color:var(--warn);font-size:13px;font-weight:400;width:100%">' +
+        (subjs - sum) + '과목이 아직 비어 있습니다 — 입력한 ' + sum + '과목 평균으로 계산했습니다</span>';
     } else {
-        els.resultWrapper.innerHTML = `<span>이대로 받으면 최종</span> <span class="rank-num">${cRes.rank}</span><span>등 예상</span> <span class="pct-num">(${cRes.pct.toFixed(2)}%)</span>`;
+      els.result.innerHTML =
+        '<span>이대로면 최종</span><span class="rank-num">' + sim.rank + '</span><span>등 예상</span>' +
+        '<span class="pct-num">(' + sim.pct.toFixed(2) + '%)</span>' +
+        '<span style="color:var(--ink-3);font-size:13px;font-weight:400;width:100%">' +
+        '남은 학기 환산평균 ' + remAvg.toFixed(2) + ' · 최종 환산평균 ' + sim.avg.toFixed(2) + '</span>';
     }
+
+    last.cur = { m: curAvg, p: curPct };
+    last.sim = (sum > 0 && sum <= subjs) ? { m: sim.avg, p: sim.pct } : null;
+    drawChart();
+    drawRefTable();
   }
 
-  Object.values(els).forEach(el => { if(el && el.tagName === 'INPUT') el.addEventListener('input', calculate); });
+  /* ======================================================================
+     분포 곡선
+     ====================================================================== */
+  var PAD = { l: 52, r: 18, t: 16, b: 38 }, W = 720, H = 300;
+  var PW = W - PAD.l - PAD.r, PH = H - PAD.t - PAD.b;
+  var X = function (m) { return PAD.l + (m - 1) / 4 * PW; };
+  var Y = function (p) { return PAD.t + p / 100 * PH; };
+
+  function drawChart() {
+    var g = [];
+
+    // 격자와 축
+    [0, 10, 25, 50, 75, 100].forEach(function (p) {
+      g.push('<line x1="' + PAD.l + '" y1="' + Y(p).toFixed(1) + '" x2="' + (W - PAD.r) +
+             '" y2="' + Y(p).toFixed(1) + '" stroke="var(--line)" stroke-width="1"/>');
+      g.push('<text x="' + (PAD.l - 9) + '" y="' + (Y(p) + 4).toFixed(1) +
+             '" text-anchor="end" font-size="11" fill="var(--ink-3)" font-family="IBM Plex Mono">' + p + '%</text>');
+    });
+    [1, 2, 3, 4, 5].forEach(function (m) {
+      g.push('<line x1="' + X(m).toFixed(1) + '" y1="' + PAD.t + '" x2="' + X(m).toFixed(1) +
+             '" y2="' + (H - PAD.b) + '" stroke="var(--line)" stroke-width="1"/>');
+      g.push('<text x="' + X(m).toFixed(1) + '" y="' + (H - PAD.b + 18) +
+             '" text-anchor="middle" font-size="11" fill="var(--ink-3)" font-family="IBM Plex Mono">' +
+             m.toFixed(1) + '</text>');
+    });
+    g.push('<text x="' + (PAD.l + PW / 2) + '" y="' + (H - 4) +
+           '" text-anchor="middle" font-size="11" fill="var(--ink-3)">환산평균 (A 5.0 ~ E 1.0)</text>');
+
+    // 단순 비례식 (참고선, 점선)
+    g.push('<path d="M ' + X(1) + ' ' + Y(100) + ' L ' + X(5) + ' ' + Y(0) +
+           '" fill="none" stroke="#B9CBD8" stroke-width="2" stroke-dasharray="5 5"/>');
+
+    // 실제 분포 곡선
+    var d = PCT.map(function (p, i) {
+      var m = M0 + MSTEP * i;
+      return (i ? 'L ' : 'M ') + X(m).toFixed(1) + ' ' + Y(p).toFixed(1);
+    }).join(' ');
+    g.push('<path d="' + d + '" fill="none" stroke="var(--sky)" stroke-width="2" ' +
+           'stroke-linejoin="round" stroke-linecap="round"/>');
+
+    // 표시점
+    // 두 표시점이 가까워도 라벨이 겹치지 않도록 한쪽은 왼쪽·위, 다른 쪽은 오른쪽·아래로 붙입니다.
+    function mark(pt, color, label, side, dy) {
+      if (!pt) return;
+      var x = X(Math.max(1, Math.min(5, pt.m))), y = Y(Math.max(0, Math.min(100, pt.p)));
+      g.push('<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) +
+             '" r="6" fill="' + color + '" stroke="var(--surface)" stroke-width="2"/>');
+      var left = (side === 'left');
+      if (left && x < PAD.l + 140) left = false;          // 왼쪽 여백이 모자라면 반대로
+      if (!left && x > W - PAD.r - 140) left = true;
+      var anchor = left ? 'end' : 'start', ox = left ? -13 : 13;
+      g.push('<text x="' + (x + ox).toFixed(1) + '" y="' + (y + dy).toFixed(1) + '" text-anchor="' + anchor +
+             '" font-size="11.5" font-weight="600" fill="' + color + '"' +
+             ' stroke="var(--surface)" stroke-width="3.5" paint-order="stroke">' + label + '</text>');
+    }
+    mark(last.cur, 'var(--pink)',
+         '현재 ' + last.cur.m.toFixed(2) + ' · ' + last.cur.p.toFixed(1) + '%', 'left', -12);
+    if (last.sim) {
+      mark(last.sim, 'var(--sky-deep)',
+           '예상 ' + last.sim.m.toFixed(2) + ' · ' + last.sim.p.toFixed(1) + '%', 'right', 17);
+    }
+
+    // 호버 영역
+    g.push('<rect id="hitzone" x="' + PAD.l + '" y="' + PAD.t + '" width="' + PW + '" height="' + PH +
+           '" fill="transparent" style="cursor:crosshair"/>');
+    g.push('<line id="cross" x1="0" y1="' + PAD.t + '" x2="0" y2="' + (H - PAD.b) +
+           '" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>');
+    g.push('<circle id="crossdot" r="4.5" fill="var(--sky)" stroke="var(--surface)" stroke-width="2" opacity="0"/>');
+
+    els.chart.innerHTML = g.join('');
+    bindHover();
+  }
+
+  function bindHover() {
+    var zone = els.chart.querySelector('#hitzone');
+    var cross = els.chart.querySelector('#cross');
+    var dot = els.chart.querySelector('#crossdot');
+    if (!zone) return;
+
+    function move(e) {
+      var r = els.chart.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width * W;
+      var m = Math.max(1, Math.min(5, 1 + (px - PAD.l) / PW * 4));
+      var p = percentileOf(m);
+      cross.setAttribute('x1', X(m)); cross.setAttribute('x2', X(m));
+      cross.setAttribute('opacity', '1');
+      dot.setAttribute('cx', X(m)); dot.setAttribute('cy', Y(p));
+      dot.setAttribute('opacity', '1');
+      els.tip.textContent = '환산평균 ' + m.toFixed(2) + ' → 상위 ' + p.toFixed(1) + '%';
+      els.tip.style.left = (X(m) / W * 100) + '%';
+      els.tip.style.top = (Y(p) / H * els.chart.getBoundingClientRect().height) + 'px';
+      els.tip.classList.add('on');
+    }
+    function leave() {
+      cross.setAttribute('opacity', '0');
+      dot.setAttribute('opacity', '0');
+      els.tip.classList.remove('on');
+    }
+    zone.addEventListener('mousemove', move);
+    zone.addEventListener('mouseleave', leave);
+    zone.addEventListener('touchmove', function (e) {
+      if (e.touches[0]) { move(e.touches[0]); e.preventDefault(); }
+    }, { passive: false });
+    zone.addEventListener('touchend', leave);
+  }
+
+  /* 곡선의 표 버전 */
+  function drawRefTable() {
+    var rows = [1, 3, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90];
+    els.refTable.innerHTML = rows.map(function (p) {
+      var real = mAtPercentile(p), lin = linearM(p), d = real - lin;
+      return '<tr><td>상위 ' + p + '%</td><td>' + real.toFixed(2) + '</td><td>' + lin.toFixed(2) + '</td>' +
+             '<td style="color:' + (Math.abs(d) < 0.05 ? 'var(--ink-3)' : 'var(--pink)') + '">' +
+             (d >= 0 ? '+' : '') + d.toFixed(2) + '</td></tr>';
+    }).join('');
+  }
+
+  /* ======================================================================
+     입력 연결
+     ====================================================================== */
+  els.stage.addEventListener('change', function () {
+    var s = STAGE[els.stage.value];
+    if (!s) return;
+    els.W.value = s.w.toFixed(1);
+    els.S.value = s.subj;
+    els.gA.value = s.subj; els.gB.value = 0; els.gC.value = 0; els.gD.value = 0; els.gE.value = 0;
+    calculate();
+  });
+  els.S.addEventListener('change', function () {
+    var n = Math.max(1, Math.round(num(els.S, 11)));
+    els.gA.value = n; els.gB.value = 0; els.gC.value = 0; els.gD.value = 0; els.gE.value = 0;
+    calculate();
+  });
+  ['N','R','W','S','gA','gB','gC','gD','gE'].forEach(function (k) {
+    els[k].addEventListener('input', calculate);
+  });
+  window.addEventListener('resize', drawChart);
+
   calculate();
 })();
 </script>
 </body>
 </html>
+index_html_코드.txt 표시 중입니다.
