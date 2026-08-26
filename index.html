@@ -1,12 +1,4 @@
-﻿
-index_html_코드.txt
-
-페이지
-1
-/
-1
-100%
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -38,6 +30,7 @@ body{
   background-attachment:fixed; color:var(--ink);
   font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  word-break:keep-all;   /* 한글이 어절 중간에서 잘리지 않게 */
 }
 .app{max-width:1120px;margin:0 auto;padding:40px 20px 80px;display:flex;flex-direction:column;gap:24px}
 
@@ -46,12 +39,13 @@ body{
 .eyebrow{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--sky-deep)}
 h1{margin:0;font-family:"Gowun Dodum",sans-serif;font-size:32px;font-weight:600;letter-spacing:-.02em}
 h1 em{font-style:normal;color:var(--pink)}
-.lede{margin:10px 0 0;color:var(--ink-2);font-size:14px;max-width:70ch}
+.lede{margin:10px 0 0;color:var(--ink-2);font-size:14px;max-width:none;white-space:nowrap;text-wrap:pretty}
 .lede b{color:var(--pink)}
 
 /* ---------- 레이아웃 ---------- */
 .grid{display:grid;grid-template-columns:1fr;gap:24px}
 @media (min-width:900px){ .grid{grid-template-columns:352px 1fr;align-items:start} }
+@media (max-width:980px){ .lede{white-space:normal;font-size:13px} }
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
   box-shadow:var(--shadow);overflow:hidden}
@@ -142,8 +136,8 @@ details.box[open]>summary::before{content:"－ "}
   <header class="masthead">
     <p class="eyebrow">진로진학 상담용 내신 산출기</p>
     <h1><em>중3 최종 석차</em> 예측 프로그램</h1>
-    <p class="lede">현재까지의 누적 석차를 환산점수로 되돌리고, 남은 학기 성취도(A~E) 조합에 따른 최종 예상 석차와 백분율을 예측합니다.
-      백분율은 단순 비례식이 아니라 <b>본교 3개 학년의 실제 성취도 분포</b>에서 뽑은 곡선으로 환산합니다.</p>
+    <p class="lede">누적 석차를 환산점수로 되돌려 남은 학기 성취도에 따른 최종 석차를 예측합니다.
+      백분율은 비례식이 아니라 <b>본교 5개 학기 실제 성취도 분포</b> 곡선으로 환산합니다.</p>
   </header>
 
   <div class="grid">
@@ -583,4 +577,3 @@ details.box[open]>summary::before{content:"－ "}
 </script>
 </body>
 </html>
-index_html_코드.txt 표시 중입니다.
